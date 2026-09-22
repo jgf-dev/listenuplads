@@ -1,0 +1,1105 @@
+<!-- @format -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AudioMale — late-night listening</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #121014;
+        --charcoal: #1c1917;
+        --bone: #e7e5e4;
+        --ash: #a8a29e;
+        --mist: rgba(231, 229, 228, 0.12);
+        --ember: #c45c26;
+        --ember-deep: #9e4a1e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: #080708;
+        color: var(--bone);
+        font-family: "Outfit", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 22px 12px 32px;
+        -webkit-font-smoothing: antialiased;
+      }
+      .viewer-note {
+        color: var(--ash);
+        font-size: 13px;
+        letter-spacing: -0.01em;
+        margin: 0 0 14px;
+        opacity: 0.8;
+      }
+      .phone {
+        width: 390px;
+        max-width: 100vw;
+        height: 844px;
+        max-height: calc(100vh - 90px);
+        min-height: 720px;
+        background: var(--ink);
+        border-radius: 48px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(231, 229, 228, 0.14);
+        box-shadow:
+          0 30px 90px rgba(28, 25, 23, 0.65),
+          0 0 0 10px #1b1917,
+          0 0 0 11px rgba(231, 229, 228, 0.09);
+      }
+      .scroll {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        overscroll-behavior: contain;
+      }
+      .scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* status + grain + home */
+      .statusbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        z-index: 55;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 28px 0;
+        pointer-events: none;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .statusbar svg {
+        display: block;
+        opacity: 0.9;
+      }
+      .grain {
+        position: absolute;
+        inset: 0;
+        z-index: 90;
+        pointer-events: none;
+        opacity: 0.09;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 180px 180px;
+      }
+      .home-bar {
+        position: absolute;
+        bottom: 9px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 134px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(231, 229, 228, 0.38);
+        z-index: 70;
+      }
+
+      /* nav island */
+      .nav-wrap {
+        position: sticky;
+        top: 12px;
+        z-index: 45;
+        padding: 0 14px;
+        margin-top: 50px;
+      }
+      .nav-island {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+        padding: 6px 6px 6px 18px;
+        border-radius: 999px;
+        background: rgba(28, 25, 23, 0.62);
+        backdrop-filter: blur(18px) saturate(1.25);
+        -webkit-backdrop-filter: blur(18px) saturate(1.25);
+        border: 1px solid var(--mist);
+      }
+      .wordmark {
+        font-family: "Fraunces", serif;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      .wordmark i {
+        font-weight: 400;
+      }
+      .menu-btn {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--bone);
+        font-family: "Outfit", sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .menu-btn:active {
+        background: rgba(231, 229, 228, 0.08);
+      }
+      .menu-sheet {
+        position: absolute;
+        top: 112px;
+        left: 14px;
+        right: 14px;
+        z-index: 80;
+        background: rgba(28, 25, 23, 0.94);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        border: 1px solid var(--mist);
+        border-radius: 24px;
+        padding: 8px;
+        box-shadow: 0 24px 60px rgba(28, 25, 23, 0.6);
+      }
+      .menu-sheet a {
+        display: flex;
+        align-items: center;
+        min-height: 52px;
+        padding: 0 16px;
+        color: var(--bone);
+        text-decoration: none;
+        font-size: 15px;
+        border-radius: 16px;
+      }
+      .menu-sheet a:hover {
+        background: rgba(231, 229, 228, 0.06);
+      }
+      .menu-sheet small {
+        display: block;
+        color: var(--ash);
+        font-size: 12.5px;
+        padding: 10px 16px 8px;
+        line-height: 1.5;
+      }
+
+      /* hero */
+      .hero {
+        position: relative;
+        min-height: 726px;
+        display: flex;
+        align-items: flex-end;
+        margin-top: -106px;
+        padding-top: 106px;
+        overflow: hidden;
+      }
+      .hero-img {
+        position: absolute;
+        inset: 0;
+      }
+      .hero-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.05) contrast(1.06) brightness(0.88);
+      }
+      .hero-tint {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(110% 55% at 78% 18%, rgba(88, 52, 110, 0.28), transparent 58%),
+          radial-gradient(90% 45% at 15% 35%, rgba(196, 92, 38, 0.18), transparent 60%),
+          linear-gradient(
+            180deg,
+            rgba(18, 16, 20, 0.62) 0%,
+            rgba(18, 16, 20, 0.12) 30%,
+            rgba(18, 16, 20, 0.06) 48%,
+            rgba(18, 16, 20, 0.74) 72%,
+            rgba(18, 16, 20, 0.97) 100%
+          );
+      }
+      .bokeh {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.9;
+      }
+      .bokeh span {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(10px);
+        background: radial-gradient(circle, rgba(255, 190, 120, 0.55), transparent 70%);
+      }
+      .wave {
+        position: absolute;
+        top: 40%;
+        left: -8%;
+        width: 116%;
+        opacity: 0.26;
+        filter: blur(0.4px);
+        pointer-events: none;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 0 20px 24px;
+        width: 100%;
+      }
+      h1 {
+        font-family: "Fraunces", serif;
+        font-weight: 480;
+        letter-spacing: -0.032em;
+        font-size: 41px;
+        line-height: 0.98;
+        margin: 0 0 12px;
+        max-width: 9.2em;
+        text-wrap: balance;
+      }
+      .sub {
+        color: var(--ash);
+        font-size: 15px;
+        line-height: 1.55;
+        margin: 0 0 18px;
+        max-width: 32ch;
+      }
+      .cta {
+        width: 100%;
+        height: 54px;
+        border: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        background: var(--ember);
+        color: #fff7ee;
+        font-family: "Outfit", sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 28px rgba(196, 92, 38, 0.28);
+      }
+      .cta:hover {
+        background: #b65422;
+      }
+      .cta:focus-visible {
+        outline: 2px solid var(--bone);
+        outline-offset: 3px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 8px;
+        margin-top: 14px;
+        color: var(--ash);
+        font-size: 12.6px;
+        line-height: 1.4;
+      }
+      .chips .dot {
+        opacity: 0.45;
+      }
+
+      /* sections */
+      .section {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      h2 {
+        font-family: "Fraunces", serif;
+        font-weight: 500;
+        letter-spacing: -0.025em;
+        font-size: 32px;
+        line-height: 1.04;
+        margin: 0 0 10px;
+        text-wrap: balance;
+      }
+      .section-sub {
+        color: var(--ash);
+        font-size: 14.5px;
+        line-height: 1.6;
+        margin: 0;
+        max-width: 38ch;
+      }
+      .how {
+        padding-top: 58px;
+        padding-bottom: 10px;
+      }
+      .steps {
+        margin-top: 6px;
+      }
+      .step {
+        padding: 24px 0 24px;
+        border-bottom: 1px solid var(--mist);
+      }
+      .step:last-child {
+        border-bottom: 0;
+      }
+      .numeral {
+        font-family: "Fraunces", serif;
+        font-size: 66px;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        color: var(--bone);
+        opacity: 0.24;
+        font-weight: 300;
+        margin-bottom: 10px;
+      }
+      .step-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 5px;
+        letter-spacing: -0.01em;
+      }
+      .step-body {
+        color: var(--ash);
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0;
+        max-width: 34ch;
+      }
+
+      /* categories */
+      .cats {
+        padding-top: 38px;
+        padding-bottom: 6px;
+      }
+      .cats-head {
+        padding: 0 20px;
+      }
+      .rail {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        padding: 18px 20px 10px;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+      }
+      .rail::-webkit-scrollbar {
+        display: none;
+      }
+      .card {
+        flex: 0 0 238px;
+        height: 368px;
+        border-radius: 22px;
+        overflow: hidden;
+        position: relative;
+        background: var(--charcoal);
+        border: 1px solid rgba(231, 229, 228, 0.1);
+        scroll-snap-align: start;
+      }
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.08) contrast(1.07) brightness(0.9);
+      }
+      .card-shade {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(120% 70% at 20% 0%, rgba(74, 44, 96, 0.24), transparent 55%),
+          linear-gradient(
+            180deg,
+            rgba(18, 16, 20, 0.04) 28%,
+            rgba(18, 16, 20, 0.52) 66%,
+            rgba(18, 16, 20, 0.93) 100%
+          );
+      }
+      .card-body {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 14px;
+      }
+      .card-name {
+        font-family: "Fraunces", serif;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px;
+      }
+      .card-blurb {
+        color: var(--ash);
+        font-size: 12.8px;
+        line-height: 1.45;
+        margin: 0 0 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .card-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .play {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        cursor: pointer;
+        border: 1px solid rgba(231, 229, 228, 0.38);
+        background: rgba(18, 16, 20, 0.48);
+        backdrop-filter: blur(8px);
+        display: grid;
+        place-items: center;
+        color: var(--bone);
+      }
+      .play.active {
+        background: var(--ember);
+        border-color: var(--ember);
+        color: #fff7ee;
+      }
+      .free-label {
+        font-size: 12px;
+        color: var(--bone);
+        background: rgba(231, 229, 228, 0.13);
+        padding: 7px 11px;
+        border-radius: 999px;
+        backdrop-filter: blur(6px);
+      }
+      .swipe-hint {
+        padding: 2px 20px 0;
+        color: var(--ash);
+        font-size: 12.5px;
+        opacity: 0.8;
+      }
+
+      /* membership */
+      .member-sec {
+        padding: 54px 16px 8px;
+      }
+      .member-head {
+        padding: 0 4px;
+      }
+      .member-panel {
+        margin-top: 16px;
+        background: var(--charcoal);
+        border: 1px solid rgba(231, 229, 228, 0.1);
+        border-radius: 28px;
+        padding: 22px 18px 18px;
+        box-shadow: 0 22px 55px rgba(28, 25, 23, 0.55);
+      }
+      .member-kicker {
+        font-size: 15px;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .member-desc {
+        color: var(--ash);
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 8px 0 0;
+      }
+      .billing-box {
+        margin-top: 16px;
+        background: rgba(231, 229, 228, 0.06);
+        border: 1px solid rgba(231, 229, 228, 0.08);
+        border-radius: 18px;
+        padding: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .billing-box strong {
+        font-size: 14px;
+      }
+      .price-soon {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-size: 15px;
+        opacity: 0.92;
+        white-space: nowrap;
+      }
+      .benefits {
+        list-style: none;
+        margin: 16px 0 0;
+        padding: 0;
+        display: grid;
+        gap: 11px;
+      }
+      .benefits li {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #d9d5d2;
+      }
+      .dot-ember {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--ember);
+        margin-top: 7px;
+        flex-shrink: 0;
+      }
+      .member-panel .cta {
+        margin-top: 18px;
+      }
+      .quiet-note {
+        text-align: center;
+        color: var(--ash);
+        font-size: 13px;
+        line-height: 1.55;
+        margin: 12px 6px 2px;
+      }
+
+      /* faq */
+      .faq-sec {
+        padding: 62px 20px 10px;
+      }
+      .faq-list {
+        margin-top: 16px;
+        border-top: 1px solid var(--mist);
+      }
+      .faq-item {
+        border-bottom: 1px solid var(--mist);
+      }
+      .faq-q {
+        width: 100%;
+        background: none;
+        border: 0;
+        color: var(--bone);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 0;
+        min-height: 56px;
+        text-align: left;
+        font-family: "Outfit", sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+      }
+      .faq-q span.mark {
+        color: var(--ash);
+        font-size: 20px;
+        line-height: 1;
+        font-weight: 300;
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        margin-right: -12px;
+      }
+      .faq-a {
+        color: var(--ash);
+        font-size: 14px;
+        line-height: 1.65;
+        margin: 0;
+        padding: 0 0 18px;
+        max-width: 36ch;
+      }
+      .footer {
+        margin: 26px 20px 34px;
+        padding: 24px 0 0;
+        border-top: 1px solid var(--mist);
+      }
+      .footer-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .footer-mark {
+        font-family: "Fraunces", serif;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+      .footer-age {
+        font-size: 12.5px;
+        color: var(--ash);
+        border: 1px solid var(--mist);
+        padding: 7px 11px;
+        border-radius: 999px;
+      }
+      .footer p {
+        color: var(--ash);
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0;
+        max-width: 34ch;
+      }
+      .footer-links {
+        display: flex;
+        gap: 4px;
+        margin-top: 10px;
+      }
+      .footer-links button {
+        background: none;
+        border: 0;
+        color: var(--bone);
+        font-family: "Outfit", sans-serif;
+        font-size: 14px;
+        min-height: 44px;
+        padding: 0 12px 0 0;
+        cursor: pointer;
+        opacity: 0.85;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+      ::selection {
+        background: rgba(196, 92, 38, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <p class="viewer-note">Visual exploration · 390 × 844 · scroll inside the frame</p>
+
+    <div class="phone">
+      <div class="statusbar">
+        <span>1:00</span>
+        <svg width="52" height="12" viewBox="0 0 52 12" fill="none" aria-hidden="true">
+          <rect x="0" y="7" width="3" height="5" rx="1" fill="#E7E5E4" />
+          <rect x="5" y="5" width="3" height="7" rx="1" fill="#E7E5E4" />
+          <rect x="10" y="3" width="3" height="9" rx="1" fill="#E7E5E4" />
+          <rect x="15" y="1" width="3" height="11" rx="1" fill="#E7E5E4" opacity=".4" />
+          <path
+            d="M26 4.5a6 6 0 0 1 8 0"
+            stroke="#E7E5E4"
+            stroke-width="1.4"
+            stroke-linecap="round"
+          />
+          <circle cx="30" cy="8.5" r="1.4" fill="#E7E5E4" />
+          <rect x="38" y="2" width="12" height="8" rx="2.5" stroke="#E7E5E4" opacity=".6" />
+          <rect x="40" y="4" width="7" height="4" rx="1" fill="#E7E5E4" />
+          <rect x="51" y="5" width="1.5" height="2.5" rx=".7" fill="#E7E5E4" opacity=".6" />
+        </svg>
+      </div>
+
+      <div class="scroll" id="scroll">
+        <div class="nav-wrap">
+          <div class="nav-island">
+            <div class="wordmark">Audio<i>Male</i></div>
+            <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuSheet">
+              Menu
+            </button>
+          </div>
+        </div>
+
+        <!-- HERO -->
+        <section class="hero">
+          <div class="hero-img">
+            <img
+              src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=800&auto=format&fit=crop"
+              alt="Man in profile wearing over-ear headphones in warm low light"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="hero-tint"></div>
+          <div class="bokeh" aria-hidden="true">
+            <span style="left: 12%; top: 26%; width: 22px; height: 22px; opacity: 0.5"></span>
+            <span style="left: 68%; top: 18%; width: 34px; height: 34px; opacity: 0.45"></span>
+            <span style="left: 78%; top: 32%; width: 14px; height: 14px; opacity: 0.6"></span>
+            <span style="left: 52%; top: 24%; width: 10px; height: 10px; opacity: 0.5"></span>
+          </div>
+          <svg class="wave" viewBox="0 0 390 60" fill="none" aria-hidden="true">
+            <path
+              d="M0 30 Q8 30 12 22 T24 30 T36 18 T48 34 T60 26 T72 30 T84 12 T96 38 T108 28 T120 30 T132 20 T144 32 T156 26 T168 30 T180 10 T192 40 T204 28 T216 30 T228 18 T240 34 T252 26 T264 30 T276 14 T288 36 T300 28 T312 30 T324 22 T336 32 T348 26 T360 30 T372 18 T384 30 T390 30"
+              stroke="#E7E5E4"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
+          <div class="hero-content">
+            <h1>
+              Erotic gay audio stories built for headphones, imagination, and late-night replay.
+            </h1>
+            <p class="sub">
+              Explore bold categories, sample free intro chapters, and unlock full members-only
+              listening.
+            </p>
+            <button class="cta">Start subscription</button>
+            <div class="chips">
+              <span>Adults only 18+</span><span class="dot">·</span><span>Free intro chapters</span
+              ><span class="dot">·</span><span>Wide story variety</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- HOW -->
+        <section class="section how">
+          <h2 class="reveal">From curiosity to full access in four quick steps.</h2>
+          <p class="section-sub reveal">
+            Scan the flow, preview the tone, then decide when you’re ready to subscribe.
+          </p>
+          <div class="steps">
+            <div class="step reveal">
+              <div class="numeral">01</div>
+              <p class="step-title">Browse categories</p>
+              <p class="step-body">Pick the mood, setting, and pace you want tonight.</p>
+            </div>
+            <div class="step reveal">
+              <div class="numeral">02</div>
+              <p class="step-title">Sample free intros</p>
+              <p class="step-body">Play opening chapters to test voices, tone, and chemistry.</p>
+            </div>
+            <div class="step reveal">
+              <div class="numeral">03</div>
+              <p class="step-title">Unlock full stories</p>
+              <p class="step-body">Start membership to access complete episodes and extras.</p>
+            </div>
+            <div class="step reveal">
+              <div class="numeral">04</div>
+              <p class="step-title">Keep listening monthly</p>
+              <p class="step-body">Come back for fresh drops and member-only favorites.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section class="cats">
+          <div class="cats-head">
+            <h2 class="reveal">Find the mood that fits tonight.</h2>
+            <p class="section-sub reveal">
+              Browse six lanes of audio-first storytelling, then preview an intro chapter before you
+              commit.
+            </p>
+          </div>
+          <div class="rail" id="rail">
+            <article class="card">
+              <img
+                src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=600&auto=format&fit=crop"
+                alt="City lights at night"
+                loading="lazy"
+              />
+              <div class="card-shade"></div>
+              <div class="card-body">
+                <h3 class="card-name">After-Hours</h3>
+                <p class="card-blurb">
+                  City lights down, voices up, and every moment feels closer.
+                </p>
+                <div class="card-row">
+                  <button class="play active" aria-label="Play After-Hours intro">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path
+                        d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l7.6-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9Z"
+                        fill="currentColor"
+                      />
+                    </svg></button
+                  ><span class="free-label">Free intro</span>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <img
+                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop"
+                alt="Close portrait in warm light"
+                loading="lazy"
+              />
+              <div class="card-shade"></div>
+              <div class="card-body">
+                <h3 class="card-name">First Encounters</h3>
+                <p class="card-blurb">New chemistry, unsure smiles, and instant pull.</p>
+                <div class="card-row">
+                  <button class="play" aria-label="Play First Encounters intro">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path
+                        d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l7.6-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9Z"
+                        fill="currentColor"
+                      />
+                    </svg></button
+                  ><span class="free-label">Free intro</span>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <img
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+                alt="Confident man in warm side light"
+                loading="lazy"
+              />
+              <div class="card-shade"></div>
+              <div class="card-body">
+                <h3 class="card-name">Confident Leads</h3>
+                <p class="card-blurb">Someone knows exactly what they want — and says it.</p>
+                <div class="card-row">
+                  <button class="play" aria-label="Play Confident Leads intro">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path
+                        d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l7.6-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9Z"
+                        fill="currentColor"
+                      />
+                    </svg></button
+                  ><span class="free-label">Free intro</span>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <img
+                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop"
+                alt="Pensive man looking away"
+                loading="lazy"
+              />
+              <div class="card-shade"></div>
+              <div class="card-body">
+                <h3 class="card-name">Slow Burn Tension</h3>
+                <p class="card-blurb">Long glances, close calls, and payoff that takes its time.</p>
+                <div class="card-row">
+                  <button class="play" aria-label="Play Slow Burn Tension intro">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path
+                        d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l7.6-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9Z"
+                        fill="currentColor"
+                      />
+                    </svg></button
+                  ><span class="free-label">Free intro</span>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <img
+                src="https://images.unsplash.com/photo-1520975954732-35dd22299614?q=80&w=600&auto=format&fit=crop"
+                alt="Smiling man in soft light"
+                loading="lazy"
+              />
+              <div class="card-shade"></div>
+              <div class="card-body">
+                <h3 class="card-name">Playful Chaos</h3>
+                <p class="card-blurb">Banter, curveballs, and plans gone deliciously off script.</p>
+                <div class="card-row">
+                  <button class="play" aria-label="Play Playful Chaos intro">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path
+                        d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l7.6-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9Z"
+                        fill="currentColor"
+                      />
+                    </svg></button
+                  ><span class="free-label">Free intro</span>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <img
+                src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=600&auto=format&fit=crop"
+                alt="Quiet night landscape before dawn"
+                loading="lazy"
+              />
+              <div class="card-shade"></div>
+              <div class="card-body">
+                <h3 class="card-name">Late-Night Escapes</h3>
+                <p class="card-blurb">Private corners and stolen time before dawn breaks.</p>
+                <div class="card-row">
+                  <button class="play" aria-label="Play Late-Night Escapes intro">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path
+                        d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l7.6-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9Z"
+                        fill="currentColor"
+                      />
+                    </svg></button
+                  ><span class="free-label">Free intro</span>
+                </div>
+              </div>
+            </article>
+          </div>
+          <p class="swipe-hint">Swipe to browse · tap play for a free intro</p>
+        </section>
+
+        <!-- MEMBERSHIP -->
+        <section class="member-sec">
+          <div class="member-head">
+            <h2 class="reveal">One simple monthly plan, built for immersive listening.</h2>
+          </div>
+          <div class="member-panel reveal">
+            <p class="member-kicker">Monthly membership</p>
+            <p class="member-desc">Straightforward monthly access. Cancel whenever you choose.</p>
+            <div class="billing-box">
+              <strong>Billed monthly</strong><span class="price-soon">Price coming soon</span>
+            </div>
+            <ul class="benefits">
+              <li><span class="dot-ember"></span>Full episodes and extras</li>
+              <li><span class="dot-ember"></span>Fresh stories each month</li>
+              <li><span class="dot-ember"></span>Private listening on your phone</li>
+            </ul>
+            <button class="cta">Start subscription</button>
+            <p class="quiet-note">
+              Not ready yet? Preview free intro chapters before you subscribe.
+            </p>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-sec">
+          <h2 class="reveal">Answers before you hit play.</h2>
+          <p class="section-sub reveal">Quick clarity on fit, previews, tone, and membership.</p>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="true">
+                Who are these stories for?<span class="mark">–</span>
+              </button>
+              <p class="faq-a">
+                AudioMale is built for adult men who want erotic gay storytelling with strong
+                voices, chemistry, and late-night replay.
+              </p>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">
+                How do free intro chapters work?<span class="mark">+</span>
+              </button>
+              <p class="faq-a" hidden>
+                Each lane opens with a short intro you can play right away. If the voice and mood
+                fit, membership unlocks the full story.
+              </p>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">
+                What tone can I expect?<span class="mark">+</span>
+              </button>
+              <p class="faq-a" hidden>
+                Warm, adult, and voice-led. Suggestive and close, made for headphones, without
+                anything graphic on this page.
+              </p>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">
+                How does monthly membership work?<span class="mark">+</span>
+              </button>
+              <p class="faq-a" hidden>
+                One plan, billed monthly. Listen as much as you like and cancel whenever you choose
+                from your account.
+              </p>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">
+                Is listening private?<span class="mark">+</span>
+              </button>
+              <p class="faq-a" hidden>
+                Yes. Use headphones, listen in your own space, and your previews and picks stay in
+                your account.
+              </p>
+            </div>
+          </div>
+          <footer class="footer">
+            <div class="footer-top">
+              <div class="footer-mark">AudioMale</div>
+              <div class="footer-age">Adults only 18+</div>
+            </div>
+            <p>
+              Private listening. Headphones recommended. This is a visual exploration of tone and
+              layout.
+            </p>
+            <div class="footer-links">
+              <button>Privacy</button><button>Terms</button><button>Support</button>
+            </div>
+          </footer>
+        </section>
+      </div>
+
+      <div class="menu-sheet" id="menuSheet" hidden>
+        <a href="#">Browse categories</a>
+        <a href="#">How it works</a>
+        <a href="#">Membership</a>
+        <a href="#">Answers before you hit play</a>
+        <small>Adults only 18+ · free intro chapters to preview before you subscribe.</small>
+      </div>
+
+      <div class="grain"></div>
+      <div class="home-bar"></div>
+    </div>
+
+    <script>
+      const btn = document.getElementById("menuBtn");
+      const sheet = document.getElementById("menuSheet");
+      btn.addEventListener("click", () => {
+        const open = sheet.hasAttribute("hidden");
+        if (open) {
+          sheet.removeAttribute("hidden");
+          btn.setAttribute("aria-expanded", "true");
+        } else {
+          sheet.setAttribute("hidden", "");
+          btn.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.getElementById("scroll").addEventListener(
+        "scroll",
+        () => {
+          if (!sheet.hasAttribute("hidden")) {
+            sheet.setAttribute("hidden", "");
+            btn.setAttribute("aria-expanded", "false");
+          }
+        },
+        { passive: true },
+      );
+
+      document.querySelectorAll(".faq-q").forEach((q) => {
+        q.addEventListener("click", () => {
+          const item = q.parentElement;
+          const ans = item.querySelector(".faq-a");
+          const isOpen = !ans.hasAttribute("hidden");
+          document.querySelectorAll(".faq-item").forEach((o) => {
+            o.querySelector(".faq-a").setAttribute("hidden", "");
+            o.querySelector(".faq-q").setAttribute("aria-expanded", "false");
+            o.querySelector(".mark").textContent = "+";
+          });
+          if (!isOpen) {
+            ans.removeAttribute("hidden");
+            q.setAttribute("aria-expanded", "true");
+            q.querySelector(".mark").textContent = "–";
+          }
+        });
+      });
+
+      document.querySelectorAll(".play").forEach((p) => {
+        p.addEventListener("click", () => {
+          document.querySelectorAll(".play").forEach((o) => o.classList.remove("active"));
+          p.classList.add("active");
+        });
+      });
+
+      const io = new IntersectionObserver(
+        (es) =>
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          }),
+        { root: document.getElementById("scroll"), threshold: 0.12 },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

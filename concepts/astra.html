@@ -1,0 +1,466 @@
+<!-- @format -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#121014" />
+    <title>AudioMale — After-hours listening</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.pexels.com" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="astra.css" />
+    <script src="astra.js"></script>
+  </head>
+
+  <body>
+    <main class="page" id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <!-- Stock imagery is exploration artwork, not a model endorsement. -->
+        <img
+          class="hero-image"
+          src="https://images.pexels.com/photos/842567/pexels-photo-842567.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200"
+          alt="An adult man listening through over-ear headphones."
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="hero-grade" aria-hidden="true"></div>
+
+        <header class="nav-island" id="nav-island">
+          <div class="nav-top">
+            <a class="wordmark" href="#top" aria-label="AudioMale home">AudioMale</a>
+            <button
+              class="menu-button"
+              id="menu-button"
+              type="button"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+            >
+              Menu
+            </button>
+          </div>
+
+          <nav class="mobile-menu" id="mobile-menu" aria-label="Main navigation" hidden>
+            <a href="#how-it-works">How it works</a>
+            <a href="#categories">Story categories</a>
+            <a href="#membership">Membership</a>
+            <a href="#faq">Questions</a>
+          </nav>
+        </header>
+
+        <div class="hero-content">
+          <h1 id="hero-title">
+            Erotic gay audio stories<br />
+            built for headphones,<br />
+            imagination, and<br />
+            <em>late-night replay.</em>
+          </h1>
+
+          <p class="hero-copy">
+            Explore bold categories, sample free intro chapters, and unlock full members-only
+            listening.
+          </p>
+
+          <a class="primary-button" href="#membership">Start subscription</a>
+
+          <ul class="hero-notes" aria-label="Listening notes">
+            <li>Adults only 18+</li>
+            <li>Free intro chapters</li>
+            <li>Wide story variety</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="how-it-works" id="how-it-works" aria-labelledby="how-title">
+        <p class="section-label">How it works</p>
+        <h2 id="how-title">From curiosity to full access in four quick steps.</h2>
+        <p class="section-copy">
+          Scan the flow, preview the tone, then decide when you’re ready to subscribe.
+        </p>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step-number" aria-hidden="true">01</span>
+            <div>
+              <h3>Browse categories</h3>
+              <p>Pick the mood, setting, and pace you want tonight.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">02</span>
+            <div>
+              <h3>Sample free intros</h3>
+              <p>Play opening chapters to test voices, tone, and chemistry.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">03</span>
+            <div>
+              <h3>Unlock full stories</h3>
+              <p>Start membership to access complete episodes and extras.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">04</span>
+            <div>
+              <h3>Keep listening monthly</h3>
+              <p>Come back for fresh drops and member-only favorites.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="categories" id="categories" aria-labelledby="categories-title">
+        <div class="section-heading">
+          <h2 id="categories-title">Find the mood that fits tonight.</h2>
+          <p class="section-copy">
+            Browse six lanes of audio-first storytelling, then preview an intro chapter before you
+            commit.
+          </p>
+        </div>
+
+        <div
+          class="story-rail"
+          id="story-rail"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Six story categories"
+          tabindex="0"
+        >
+          <article
+            class="story-card"
+            aria-labelledby="after-hours-title"
+            style="
+              --position: 52% 30%;
+              --grade: brightness(0.73) contrast(1.14) saturate(0.42) sepia(0.48);
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1488161628813-04466f872be2?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
+              alt="A man in a dark coat, looking away."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="story-content">
+              <h3 id="after-hours-title">After-Hours</h3>
+              <p>City lights down, voices up, and every moment feels closer.</p>
+              <div class="intro-control">
+                <button
+                  class="play-button"
+                  type="button"
+                  data-intro="After-Hours"
+                  aria-label="Preview the After-Hours free intro"
+                  aria-haspopup="dialog"
+                >
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+                    <path d="M2 1.5 12 8 2 14.5Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span>Free intro</span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="story-card"
+            aria-labelledby="encounters-title"
+            style="
+              --position: 50% 27%;
+              --grade: brightness(0.79) contrast(1.08) saturate(0.38) sepia(0.45);
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
+              alt="A close portrait of an adult man in soft light."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="story-content">
+              <h3 id="encounters-title">First Encounters</h3>
+              <p>New chemistry, unsure smiles, and instant pull.</p>
+              <div class="intro-control">
+                <button
+                  class="play-button"
+                  type="button"
+                  data-intro="First Encounters"
+                  aria-label="Preview the First Encounters free intro"
+                  aria-haspopup="dialog"
+                >
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+                    <path d="M2 1.5 12 8 2 14.5Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span>Free intro</span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="story-card"
+            aria-labelledby="leads-title"
+            style="
+              --position: 50% 25%;
+              --grade: brightness(0.74) contrast(1.2) saturate(0.28) sepia(0.32);
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
+              alt="An adult man in a dark tailored jacket."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="story-content">
+              <h3 id="leads-title">Confident Leads</h3>
+              <p>Someone knows exactly what they want—and says it.</p>
+              <div class="intro-control">
+                <button
+                  class="play-button"
+                  type="button"
+                  data-intro="Confident Leads"
+                  aria-label="Preview the Confident Leads free intro"
+                  aria-haspopup="dialog"
+                >
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+                    <path d="M2 1.5 12 8 2 14.5Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span>Free intro</span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="story-card"
+            aria-labelledby="slow-burn-title"
+            style="
+              --position: 48% 28%;
+              --grade: brightness(0.72) contrast(1.14) saturate(0.43) sepia(0.35);
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
+              alt="A close, contemplative portrait of a bearded man."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="story-content">
+              <h3 id="slow-burn-title">Slow Burn Tension</h3>
+              <p>Long glances, close calls, and payoff that takes its time.</p>
+              <div class="intro-control">
+                <button
+                  class="play-button"
+                  type="button"
+                  data-intro="Slow Burn Tension"
+                  aria-label="Preview the Slow Burn Tension free intro"
+                  aria-haspopup="dialog"
+                >
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+                    <path d="M2 1.5 12 8 2 14.5Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span>Free intro</span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="story-card"
+            aria-labelledby="chaos-title"
+            style="
+              --position: 50% 29%;
+              --grade: brightness(0.8) contrast(1.1) saturate(0.48) sepia(0.46);
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
+              alt="An adult man with a relaxed, playful expression."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="story-content">
+              <h3 id="chaos-title">Playful Chaos</h3>
+              <p>Banter, curveballs, and plans gone deliciously off script.</p>
+              <div class="intro-control">
+                <button
+                  class="play-button"
+                  type="button"
+                  data-intro="Playful Chaos"
+                  aria-label="Preview the Playful Chaos free intro"
+                  aria-haspopup="dialog"
+                >
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+                    <path d="M2 1.5 12 8 2 14.5Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span>Free intro</span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="story-card"
+            aria-labelledby="escapes-title"
+            style="
+              --position: 58% 45%;
+              --grade: brightness(0.66) contrast(1.12) saturate(0.65) sepia(0.22);
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
+              alt="A quiet bar interior with warm pools of light."
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="story-content">
+              <h3 id="escapes-title">Late-Night Escapes</h3>
+              <p>Private corners and stolen time before dawn breaks.</p>
+              <div class="intro-control">
+                <button
+                  class="play-button"
+                  type="button"
+                  data-intro="Late-Night Escapes"
+                  aria-label="Preview the Late-Night Escapes free intro"
+                  aria-haspopup="dialog"
+                >
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+                    <path d="M2 1.5 12 8 2 14.5Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span>Free intro</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="rail-footer">
+          <span class="rail-hint">Swipe to explore</span>
+          <div class="rail-navigation" aria-label="Category navigation">
+            <button id="previous-category" type="button" aria-label="Previous category" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m10 6-6 6 6 6M4 12h16" stroke="currentColor" stroke-width="1.3" />
+              </svg>
+            </button>
+            <span class="rail-count" id="rail-count" aria-live="polite" aria-atomic="true">
+              01 / 06
+            </span>
+            <button id="next-category" type="button" aria-label="Next category">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m14 6 6 6-6 6M20 12H4" stroke="currentColor" stroke-width="1.3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="membership" id="membership" aria-labelledby="membership-title">
+        <h2 id="membership-title">One simple monthly plan, built for immersive listening.</h2>
+
+        <div class="membership-panel">
+          <h3>Monthly membership</h3>
+          <p class="plan-description">
+            Straightforward monthly access. Cancel whenever you choose.
+          </p>
+
+          <div class="billing">
+            <p class="price-placeholder">Price coming soon</p>
+            <p class="billing-label">Billed monthly</p>
+          </div>
+
+          <ul class="benefits">
+            <li>Full-length stories</li>
+            <li>Members-only extras</li>
+            <li>Fresh listening every month</li>
+          </ul>
+
+          <button
+            class="primary-button"
+            id="subscription-button"
+            type="button"
+            aria-haspopup="dialog"
+          >
+            Start subscription
+          </button>
+
+          <p class="membership-note">
+            Not ready yet? Preview free intro chapters before you subscribe.
+          </p>
+        </div>
+      </section>
+
+      <section class="faq" id="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Answers before you hit play.</h2>
+        <p class="section-copy">Quick clarity on fit, previews, tone, and membership.</p>
+
+        <div class="faq-list">
+          <details name="questions" open>
+            <summary>
+              <span>Who are these stories for?</span>
+              <span class="faq-mark" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              AudioMale is built for adult men who want erotic gay storytelling with strong voices,
+              chemistry, and late-night replay.
+            </div>
+          </details>
+
+          <details name="questions">
+            <summary>
+              <span>Can I listen before subscribing?</span>
+              <span class="faq-mark" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              Yes. Sample free intro chapters to explore the voices, tone, and chemistry before
+              deciding on membership.
+            </div>
+          </details>
+
+          <details name="questions">
+            <summary>
+              <span>What’s the tone of the stories?</span>
+              <span class="faq-mark" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              Erotic, intimate, and varied. Explore the categories and preview an intro to find the
+              mood and pace that suit you.
+            </div>
+          </details>
+
+          <details name="questions">
+            <summary>
+              <span>Can I cancel my membership?</span>
+              <span class="faq-mark" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              Yes. Membership is billed monthly, and you can cancel whenever you choose.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <a class="wordmark" href="#top" aria-label="AudioMale, back to top">AudioMale</a>
+        <span class="footer-note">Adults only 18+</span>
+      </footer>
+    </main>
+
+    <dialog
+      class="prototype-dialog"
+      id="prototype-dialog"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-copy"
+    >
+      <h2 id="dialog-title"></h2>
+      <p id="dialog-copy"></p>
+      <form method="dialog">
+        <button class="quiet-button" autofocus>Back to the page</button>
+      </form>
+    </dialog>
+  </body>
+</html>
