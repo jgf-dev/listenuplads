@@ -1,8 +1,31 @@
+import posthog from "posthog-js";
 import "./style.css";
 import heroImg from "./assets/hero.png";
 import typescriptLogo from "./assets/typescript.svg";
 import viteLogo from "./assets/vite.svg";
 import { setupCounter } from "./counter.ts";
+
+const posthogToken = import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN;
+const posthogHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
+
+if (!posthogToken && import.meta.env.DEV) {
+  throw new Error(
+    "VITE_PUBLIC_POSTHOG_TOKEN variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_PUBLIC_POSTHOG_TOKEN is configured",
+  );
+}
+
+if (!posthogHost && import.meta.env.DEV) {
+  throw new Error(
+    "VITE_PUBLIC_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_PUBLIC_POSTHOG_HOST is configured",
+  );
+}
+
+if (posthogToken && posthogHost) {
+  posthog.init(posthogToken, {
+    api_host: posthogHost,
+    defaults: "2026-05-30",
+  });
+}
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 <section id="center">
@@ -57,4 +80,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 <section id="spacer"></section>
 `;
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+setupCounter(
+  document.querySelector<HTMLButtonElement>("#counter")!,
+  posthogToken && posthogHost ? posthog : undefined,
+);
