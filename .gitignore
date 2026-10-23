@@ -30,3 +30,15 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Audio artifacts & test renders
+pipeline/artifacts/
+*.wav
+*.mp3
+
