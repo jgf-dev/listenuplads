@@ -9,6 +9,9 @@
     "preview": "vp preview",
     "prepare": "vp config"
   },
+  "dependencies": {
+    "posthog-js": "^1.434.15"
+  },
   "devDependencies": {
     "typescript": "~6.0.2",
     "vite": "npm:@voidzero-dev/vite-plus-core@0.3.2",
@@ -17,11 +20,10 @@
   "overrides": {
     "vite": "npm:@voidzero-dev/vite-plus-core@0.3.2"
   },
-  "devEngines": {
-    "packageManager": {
-      "name": "bun",
-      "version": "1.4.2",
-      "onFail": "download"
-    }
-  }
+  "engines": {
+    "npm": ">=11.19.0"
+  },
+  "trustedDependencies": [
+    "core-js"
+  ]
 }
