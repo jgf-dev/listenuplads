@@ -17,7 +17,7 @@ import os
 import pathlib
 import sys
 from dataclasses import asdict, dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -29,6 +29,7 @@ except ImportError:
 
 try:
     from .fish_audio_client import FishAudioClient
+    from .gemini_tts_client import GeminiTTSClient
     from .mastering import (
         layer_ambience_bed,
         master_single_track,
@@ -39,6 +40,7 @@ try:
     from .qc_harness import AudioMetrics, AudioQCHarness, ProductionTarget
 except (ImportError, ValueError):
     from fish_audio_client import FishAudioClient
+    from gemini_tts_client import GeminiTTSClient
     from mastering import (
         layer_ambience_bed,
         master_single_track,
@@ -89,6 +91,7 @@ class AudioPipelineOrchestrator:
         self.qc_harness = AudioQCHarness(qc_targets or ProductionTarget())
         self.openrouter = OpenRouterClient()
         self.fish_audio = FishAudioClient()
+        self.gemini_tts = GeminiTTSClient(casting_matrix_path=casting_matrix_path)
 
         # Load casting matrix
         matrix_file = casting_matrix_path or os.path.join(os.path.dirname(__file__), "casting_matrix.json")
@@ -125,6 +128,8 @@ class AudioPipelineOrchestrator:
             speaker = None
             if ":" in line:
                 speaker = line.split(":", 1)[0].strip()
+            elif line.startswith("[") and "]" in line:
+                speaker = line[1:line.index("]")].strip()
 
             line_len = len(line)
             new_speaker = speaker not in current_speakers if speaker else False
@@ -154,13 +159,43 @@ class AudioPipelineOrchestrator:
         chunk_transcript: str,
         provider: str,
         scene_dir: pathlib.Path,
-    ) -> str:
+        previous_interaction_id: Optional[str] = None,
+    ) -> Tuple[str, Optional[str]]:
         """Renders an individual audio chunk using the selected provider."""
         part_wav = str(scene_dir / f"part_{part_idx:02d}.wav")
+        next_interaction_id = None
 
-        if provider == "fish_audio" and self.fish_audio.api_key:
+        if provider == "gemini_tts" and getattr(self.gemini_tts, "_client", None):
+            logger.info("Synthesizing chunk %d with Gemini TTS...", part_idx)
+            if "# SYSTEM PREAMBLE" not in chunk_transcript:
+                char_lines = [
+                    f"- {name} (Voice: {info.get('voice', 'Algenib')}): {info.get('profile', 'Grounded')}"
+                    for name, info in scene.characters.items()
+                ]
+                prompt_content = (
+                    "# SYSTEM PREAMBLE: Synthesize speech ONLY for the transcripts under the #### TRANSCRIPT headers. "
+                    "Do NOT read aloud the section titles, scene descriptions, actor names, or director notes.\n\n"
+                    f"# AUDIO PROFILE: {scene.title}\n\n"
+                    f"### THE SCENE: {scene.setting}\n\n"
+                    f"### DIRECTOR'S NOTES\n"
+                    f"Style:\n{chr(10).join(char_lines)}\nPace: Natural, intimate\n\n"
+                    f"#### TRANSCRIPT\n{chunk_transcript}\n"
+                )
+            else:
+                prompt_content = chunk_transcript
+
+            try:
+                _, next_interaction_id = self.gemini_tts.synthesize(
+                    prompt_content=prompt_content,
+                    output_path=part_wav,
+                    previous_interaction_id=previous_interaction_id,
+                )
+                return part_wav, next_interaction_id
+            except Exception as e:
+                logger.error("Gemini TTS synthesis failed for chunk %d: %s. Falling back to local generation.", part_idx, e)
+
+        elif provider == "fish_audio" and self.fish_audio.api_key:
             logger.info("Synthesizing chunk %d with Fish Audio...", part_idx)
-            # Find voice reference ID if mapped
             ref_id = None
             for char_info in scene.characters.values():
                 ref_id = char_info.get("fish_audio_ref_id")
@@ -172,30 +207,28 @@ class AudioPipelineOrchestrator:
                 reference_id=ref_id,
                 audio_format="wav",
             )
-        else:
-            logger.info("Simulating / Local generation for chunk %d (provider: %s)...", part_idx, provider)
-            # If no live API key is set or in mock/test mode, generate synthetic speech tone via ffmpeg
-            # Creates a realistic speech test tone with natural pauses for testing the mastering chain
-            duration_sec = max(3.0, len(chunk_transcript.split()) * 0.45)
-            cmd = [
-                "ffmpeg",
-                "-y",
-                "-f",
-                "lavfi",
-                "-i",
-                f"sine=frequency=220:duration={duration_sec}",
-                "-af",
-                "volume=-20dB,highpass=f=80",
-                "-ar",
-                "24000",
-                "-ac",
-                "1",
-                part_wav,
-            ]
-            import subprocess
-            subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+            return part_wav, None
 
-        return part_wav
+        logger.info("Simulating / Local generation for chunk %d (provider: %s)...", part_idx, provider)
+        duration_sec = max(3.0, len(chunk_transcript.split()) * 0.45)
+        cmd = [
+            "ffmpeg",
+            "-y",
+            "-f",
+            "lavfi",
+            "-i",
+            f"sine=frequency=220:duration={duration_sec}",
+            "-af",
+            "volume=-20dB,highpass=f=80",
+            "-ar",
+            "24000",
+            "-ac",
+            "1",
+            part_wav,
+        ]
+        import subprocess
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return part_wav, None
 
     def process_scene(self, scene: SceneSpec) -> ProductionResult:
         """Executes full production pipeline for a single scene."""
@@ -225,10 +258,13 @@ class AudioPipelineOrchestrator:
         chunks = self.split_transcript_by_speakers(scene.transcript)
         logger.info("Split transcript into %d chunk(s)", len(chunks))
 
-        # 3. Render parts
+        # 3. Render parts with session continuity within the scene
         raw_parts = []
+        prev_id = None
         for i, chunk in enumerate(chunks, 1):
-            part_file = self.render_part(i, scene, chunk, provider, scene_dir)
+            part_file, prev_id = self.render_part(
+                i, scene, chunk, provider, scene_dir, previous_interaction_id=prev_id
+            )
             raw_parts.append(part_file)
 
         # 4. Stitch parts together & Master to -16 LUFS

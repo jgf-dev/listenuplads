@@ -33,6 +33,7 @@ from mastering import (
 )
 from openrouter_client import OpenRouterClient
 from fish_audio_client import FishAudioClient
+from gemini_tts_client import GeminiTTSClient
 from tts_orchestrator import AudioPipelineOrchestrator, SceneSpec
 
 
@@ -235,6 +236,40 @@ Julian: Goodnight, sir.
         # Running series check on identical file should have 0 drift
         results, issues = harness.evaluate_scene_series([self.sample_wav, self.sample_wav])
         self.assertEqual(len(issues), 0)
+
+    def test_gemini_tts_client_speaker_parsing_and_remapping(self):
+        client = GeminiTTSClient()
+        prompt = """# SYSTEM PREAMBLE: Synthesize speech ONLY for the transcripts under the #### TRANSCRIPT headers.
+# AUDIO PROFILE: Test Remap
+### DIRECTOR'S NOTES
+- Narrator (Voice: Kore)
+- Partner (Voice: Algenib)
+#### TRANSCRIPT
+[Narrator]
+Narrator: [sighs] Intimate moment.
+Partner: [whispers] Right here.
+"""
+        sp_to_vc, active = client.parse_speakers_from_markdown(prompt)
+        self.assertIn("Narrator", active)
+        self.assertIn("Partner", active)
+
+        speech_config = client.build_speech_config(active, sp_to_vc)
+        # Google GenAI requires exactly 2 speaker voice configs
+        self.assertEqual(len(speech_config), 2)
+        # Feminine voice 'Kore' must be remapped to male fallback
+        self.assertNotEqual(speech_config[0]["voice"], "Kore")
+        self.assertEqual(speech_config[0]["voice"], "Zubenelgenubi")
+        self.assertEqual(speech_config[1]["voice"], "Algenib")
+
+    def test_gemini_tts_speech_config_multi_speaker_constraint(self):
+        client = GeminiTTSClient()
+        # Single active speaker test
+        speech_config = client.build_speech_config(["SoloProtagonist"], {"SoloProtagonist": "Algenib"})
+        self.assertEqual(len(speech_config), 2)
+        self.assertEqual(speech_config[0]["speaker"], "SoloProtagonist")
+        self.assertEqual(speech_config[0]["voice"], "Algenib")
+        self.assertEqual(speech_config[1]["speaker"], "DummySecondary")
+        self.assertEqual(speech_config[1]["voice"], "Puck")
 
 
 if __name__ == "__main__":
