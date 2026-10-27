@@ -253,6 +253,15 @@ def mix_soundtrack_and_sfx(
     ]
     run_cmd(cmd)
 
+    # Apply calibrated two-pass EBU R128 master to guarantee target loudness and true-peak compliance
+    tmp_mix = output_wav + ".tmp_mix.wav"
+    os.rename(output_wav, tmp_mix)
+    try:
+        master_single_track(tmp_mix, output_wav, target_lufs=target_lufs, true_peak_dbtp=true_peak_dbtp)
+    finally:
+        if os.path.exists(tmp_mix):
+            os.remove(tmp_mix)
+
 
 def layer_ambience_bed(
     dialogue_wav: str,

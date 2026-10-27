@@ -15,12 +15,12 @@
 - **2 (Poor):** Character sounds noticeably older, younger, or has an erratic accent shift between scenes.
 - **1 (Reject):** Complete tone flip (e.g. rugged baritone suddenly turns into high-pitched teen or voice switches entirely).
 
-### 2. Acoustic Intimacy & "Bedroom Voice" Realism (1–5)
-- **5 (Exemplary):** Sound creates a convincing "cocoon of privacy." Low-end proximity effect captures natural vocal weight; glottal airflow and breathiness feel authentic and arousing without sounding like forced asthmatic whispering.
-- **4 (Good):** Warm, intimate acoustic delivery; good breath-to-tone ratio.
+### 2. Acoustic Intimacy & Voiced Phonation Realism (1–5)
+- **5 (Exemplary):** Sound creates a convincing "cocoon of privacy." Low-end proximity effect captures natural adult male vocal weight and chest resonance; close-mic intimate phonation is fully voiced with glottal body rather than unvoiced white-noise whispering or breathy air collapse.
+- **4 (Good):** Warm, intimate acoustic delivery; strong voiced resonance; good breath-to-tone ratio.
 - **3 (Acceptable):** Somewhat intimate, but occasionally reverts to public/conversational projection during sensitive moments.
 - **2 (Poor):** Sounds clinical, detached, or overly performative.
-- **1 (Reject):** Loud, theatrical, or robotic. Completely destroys erotic immersion.
+- **1 (Reject):** Loud, theatrical, robotic, or collapses into unvoiced breathy white noise. Completely destroys erotic immersion.
 
 ### 3. Pacing, Silence & Breathing Dynamics (1–5)
 - **5 (Exemplary):** Pacing breathes naturally with the emotional stakes. Strategic ASMR-style pauses let tension build; no rushed dialogue tags; ~100-130 words per minute during intimacy.
@@ -30,11 +30,11 @@
 - **1 (Reject):** Runaway read rate (>180 wpm) or dead air gaps (>3s) that sound like generation glitches.
 
 ### 4. Emotional-Cue & Paralinguistic Fidelity (1–5)
-- **5 (Exemplary):** Inline tags (`[whispers]`, `[gasp]`, `[trembling]`, `[sighs]`) integrate seamlessly into words without jarring pitch breaks or harsh volume drops.
-- **4 (Good):** Cues execute accurately and enhance the narrative intent.
+- **5 (Exemplary):** Voiced close phonation cues (`[low, voiced]`, `[tight]`, `[gasp]`, `[heavy breath]`, `[sighs]`) integrate seamlessly into words without jarring pitch breaks, vocal fry collapse, or unvoiced sibilance. Preserves adult male resonance and physical weight.
+- **4 (Good):** Cues execute accurately and enhance narrative physical tension with stable vocal body.
 - **3 (Acceptable):** Cues trigger emotional shifts, but transitions are occasionally abrupt.
 - **2 (Poor):** Tags sound exaggerated, cartoonish, or disconnected from the text.
-- **1 (Reject):** Banned tags present (shouting during bedroom scenes) or model reads tag words aloud.
+- **1 (Reject):** Banned tags present (shouting during bedroom scenes, prolonged unvoiced `[whispers]`) or model reads tag words aloud.
 
 ### 5. Sound Design & Ambience Mixing (1–5)
 - **5 (Exemplary):** Subtle background bed (rain, room acoustics, bed linen, distant night sounds) anchors the scene. Sidechain ducking gently recesses ambience under dialogue without audible pumping; audio loudness meets -16 LUFS without clipping.

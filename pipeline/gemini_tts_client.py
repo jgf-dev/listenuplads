@@ -91,7 +91,14 @@ class GeminiTTSClient:
         speech_config: List[Dict[str, str]] = []
 
         for sp in active_speakers:
-            assigned_voice = speaker_to_voice.get(sp, self.DEFAULT_MALE_FALLBACK)
+            assigned_voice = speaker_to_voice.get(sp)
+            if not assigned_voice and sp == "Narrator":
+                for alias_k, alias_v in speaker_to_voice.items():
+                    if alias_k.lower() not in ("style", "pace", "setting", "mood"):
+                        assigned_voice = alias_v
+                        break
+            if not assigned_voice:
+                assigned_voice = self.DEFAULT_MALE_FALLBACK
             safe_voice = self.remap_voice_if_forbidden(assigned_voice, sp)
             speech_config.append({"speaker": sp, "voice": safe_voice})
             if len(speech_config) == 2:
@@ -150,19 +157,24 @@ class GeminiTTSClient:
                 continue
 
         # 2. Extract active speakers in transcript section
-        transcript_content = content
-        if "#### TRANSCRIPT" in content:
-            transcript_content = content.split("#### TRANSCRIPT", 1)[1]
-        elif "## TRANSCRIPT" in content:
-            transcript_content = content.split("## TRANSCRIPT", 1)[1]
+        # Use regex to find the section header line rather than matching inside the preamble
+        transcript_match = re.search(r"^\s*#{2,4}\s*TRANSCRIPT\b.*$", content, re.MULTILINE)
+        if transcript_match:
+            transcript_content = content[transcript_match.end():]
+        else:
+            transcript_content = content
 
         for line in transcript_content.split("\n"):
             line = line.strip()
+            # Ignore headers or empty lines
+            if not line or line.startswith("#"):
+                continue
+
             # Match bracketed: [Narrator (Levi)] or [Ewan]
             m_br = re.match(r"^\[([A-Za-z0-9_\-\s\(\)]+)\]", line)
             if m_br:
                 sp = m_br.group(1).strip()
-                if sp not in active_speakers:
+                if sp.lower() not in ("style", "pace", "setting", "mood") and sp not in active_speakers:
                     active_speakers.append(sp)
                 continue
 
@@ -170,7 +182,7 @@ class GeminiTTSClient:
             m_col = re.match(r"^([A-Za-z0-9_\-]+)\s*:", line)
             if m_col:
                 sp = m_col.group(1).strip()
-                if sp not in active_speakers:
+                if sp.lower() not in ("style", "pace", "setting", "mood") and sp not in active_speakers:
                     active_speakers.append(sp)
                 continue
 

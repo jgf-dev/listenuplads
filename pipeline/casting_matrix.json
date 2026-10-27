@@ -1,93 +1,94 @@
 {
   "project": "Project A - Audio Stories",
-  "version": "1.1",
+  "version": "1.2",
   "gender_policy": {
     "target_genre": "gay_male_erotica",
     "enforce_male_voices": true,
     "default_male_fallback": "Zubenelgenubi",
     "forbidden_voices_for_male_roles": ["Kore", "Aoede", "Leda", "Zephyr"],
-    "defect_resolution_note": "Prevents Artefact 2 defect where story-builder fallback defaulted to Kore (female voice). All fallbacks are strictly verified male archetypes."
+    "defect_resolution_note": "Prevents Artefact 2 defect where story-builder fallback defaulted to Kore (female voice). Both characters are grown adult men; differences are physical mass, pitch floor, and leverage, never feminine yield."
   },
   "intimacy_and_pacing_policy": {
-    "whisper_guideline": "Use intimate close-proximity phonation with low pitch and warm vocal fry. Do NOT collapse into unvoiced breathy white-noise whispering.",
-    "state_isolation": "Reset stateful session parameters between scenes to prevent intimate/bedroom delivery styles from carrying over into daytime/outdoor scenes.",
-    "timbre_matching": "Maintain consistent vocal identity across scene transitions; adjust projection level while keeping fundamental frequency and vocal resonance matched."
+    "whisper_guideline": "Strictly use low, close-proximity VOICED phonation with vocal body and chest resonance. Continuous unvoiced white-noise whispering is banned as it collapses phonation and causes inter-scene timbre drift.",
+    "state_isolation": "Reset stateful session parameters between scenes to prevent intimate bedroom delivery styles from carrying over into daytime/outdoor scenes.",
+    "timbre_matching": "Maintain consistent adult male vocal identity across scene transitions; adjust projection level while keeping fundamental frequency (< 200 Hz) and chest resonance matched.",
+    "banned_tropes": ["velvety", "silken", "claimed", "delicate", "adoration-as-the-event", "shivering-as-the-event", "'I've got you' as the climax"]
   },
   "archetypes": [
     {
       "id": "rugged_dominant_lead",
       "name": "Rugged / Dominant Lead",
-      "personality": "Protective, experienced, grounded, authoritative yet deeply tender in private intimacy.",
-      "acoustic_profile": "Deep baritone / bass, low-end vocal resonance, heavy glottal airflow, proximity effect bass boost.",
-      "delivery_style": "Slow, measured cadence, quiet strength, minimal projection in close scenes.",
+      "personality": "Heavy physical mass, grounded, quiet physical dominance, short direct sentences, hands-on control.",
+      "acoustic_profile": "Deep baritone / bass, low-end vocal resonance, heavy chest airflow, proximity effect bass boost.",
+      "delivery_style": "Slow, measured cadence, quiet physical authority, minimal projection in close scenes, fully voiced.",
       "voices": {
         "gemini": ["Algenib", "Orus", "Alnilam"],
         "fish_audio": ["male_deep_intimate_baritone_s2", "reference_id_rugged_baritone"],
         "chatterbox": ["male_deep_intimate_baritone"],
         "orpheus_3b": ["male_gravelly_grounded"]
       },
-      "recommended_tags": ["[whispers]", "[deep breath]", "[sighs]", "[slow]", "[long pause]"],
-      "forbidden_intimate_tags": ["[shouting]", "[excited]", "[loud]"]
+      "recommended_tags": ["[low, voiced]", "[heavy breath]", "[slow]", "[long pause]"],
+      "forbidden_intimate_tags": ["[whispers]", "[shouting]", "[excited]", "[loud]"]
     },
     {
-      "id": "vulnerable_soft_partner",
-      "name": "Vulnerable / Soft Partner",
-      "personality": "Yielding, emotional, sensitive, overwhelmed with sensation, hesitant yet deeply trusting.",
-      "acoustic_profile": "Soft tenor, high glottal flow, breathy vocal texture, velvet intimacy, micro-tremors on climax.",
-      "delivery_style": "Close proximity (in-ear), gentle airflow, hesitations broken by short pauses, emotional vulnerability.",
+      "id": "focused_compact_partner",
+      "name": "Focused / Compact Partner",
+      "personality": "Equal adult male partner. Tighter vocal cords under physical stretch, strain, or leverage; grounded, responsive, physically engaged.",
+      "acoustic_profile": "Crisp baritone / tenor, fully voiced phonation, grounded chest resonance, pitch tightens slightly with exertion or breath catches.",
+      "delivery_style": "Close proximity, low and voiced with vocal body. Breaths catch naturally on exertion; short groans, heavy exhalations.",
       "voices": {
-        "gemini": ["Enceladus", "Achernar"],
-        "fish_audio": ["male_soft_breathy_tenor_s2", "reference_id_vulnerable_tenor"],
-        "chatterbox": ["male_breathy_soft_tenor"],
-        "orpheus_3b": ["male_vulnerable_tender"]
+        "gemini": ["Puck", "Zubenelgenubi"],
+        "fish_audio": ["male_compact_baritone_s2", "reference_id_grounded_tenor"],
+        "chatterbox": ["male_grounded_compact_tenor"],
+        "orpheus_3b": ["male_strained_resonant"]
       },
-      "recommended_tags": ["[sighs]", "[gasp]", "[pant]", "[trembling]", "[whispers]", "[short pause]", "[swallows]"],
-      "forbidden_intimate_tags": ["[anger]", "[shouting]", "[determination]"]
+      "recommended_tags": ["[low, voiced]", "[tight]", "[breath catch]", "[gasp]", "[pant]", "[groan]", "[short pause]"],
+      "forbidden_intimate_tags": ["[whispers]", "[adoration]", "[shivering]", "[shouting]"]
     },
     {
-      "id": "playful_athletic_jock",
-      "name": "Energetic / Playful Athletic",
-      "personality": "Confident, teasing, boyish, casual banter, switches from cheeky cockiness to breathless awe.",
-      "acoustic_profile": "Bright, clear modern slang cadence, mid-range projection, vocal smile.",
-      "delivery_style": "Fluid conversational pace, teasing laughter, slightly faster delivery in casual banter, dropping low in bedroom.",
+      "id": "playful_athletic_lead",
+      "name": "Energetic / Athletic Lead",
+      "personality": "Confident, athletic banter, switches from direct locker-room cockiness to grounded physical focus in bedroom.",
+      "acoustic_profile": "Bright, clear baritone cadence, mid-range projection in banter, dropping into deep chest voice during intimacy.",
+      "delivery_style": "Fluid conversational pace in dialogue, deliberate and low during physical sex.",
       "voices": {
         "gemini": ["Puck", "Sadachbia", "Fenrir"],
         "fish_audio": ["male_bright_athletic_s2", "reference_id_athletic_jock"],
         "chatterbox": ["male_bright_athletic"],
         "orpheus_3b": ["male_casual_confident"]
       },
-      "recommended_tags": ["[chuckles]", "[interest]", "[adoration]", "[short pause]"],
-      "forbidden_intimate_tags": ["[bored]", "[monotone]"]
+      "recommended_tags": ["[chuckles]", "[interest]", "[short pause]", "[low, voiced]"],
+      "forbidden_intimate_tags": ["[whispers]", "[bored]", "[monotone]"]
     },
     {
-      "id": "warm_comforting_caregiver",
-      "name": "Warm / Comforting Roommate or Caregiver",
-      "personality": "Reassuring, soothing, steady, empathetic, patient, perfect for emotional climaxes and aftercare.",
-      "acoustic_profile": "Warm, relaxed, velvety, smooth mid-frequencies, rhythmic breathing pattern.",
-      "delivery_style": "Slow comforting cadence, warm smile in voice, soothing reassurance.",
+      "id": "steady_grounded_partner",
+      "name": "Steady / Grounded Partner",
+      "personality": "Steady, physically assured, patient, rhythmic breath support, grounded adult male presence.",
+      "acoustic_profile": "Warm, deep, smooth low-mid frequencies, rhythmic breathing pattern, chest resonance.",
+      "delivery_style": "Slow comforting cadence, grounded presence, steady pacing.",
       "voices": {
-        "gemini": ["Zubenelgenubi", "Algieba"],
+        "gemini": ["Charon", "Algieba"],
         "fish_audio": ["male_warm_soothing_s2", "reference_id_warm_caregiver"],
         "chatterbox": ["male_warm_soothing"],
         "orpheus_3b": ["male_gentle_protective"]
       },
-      "recommended_tags": ["[adoration]", "[sighs]", "[deep breath]", "[whispers]"],
-      "forbidden_intimate_tags": ["[shouting]", "[frustration]"]
+      "recommended_tags": ["[low, voiced]", "[deep breath]", "[sighs]", "[slow]"],
+      "forbidden_intimate_tags": ["[whispers]", "[adoration]", "[shouting]", "[frustration]"]
     },
     {
       "id": "intimate_first_person_narrator",
       "name": "Intimate First-Person Narrator (Protagonist Interiority)",
-      "personality": "Confessional, direct-to-listener, vulnerable thoughts, interior monologue during intimate moments.",
-      "acoustic_profile": "Treated as protagonist's voice inside the listener's head; warm, intimate, zero theatrical bombast.",
-      "delivery_style": "Conversational, unhurried, reflecting real-time physical sensations, NOT third-person objective.",
+      "personality": "First-person physical experience, direct adult male thoughts, interior physical reactions during intimate moments.",
+      "acoustic_profile": "Protagonist's voice inside the listener's head; warm, intimate, zero theatrical bombast.",
+      "delivery_style": "Conversational, unhurried, reflecting real-time physical sensations, grounded adult delivery.",
       "voices": {
-        "gemini": ["Match protagonist voice (Enceladus, Algenib, etc.)"],
+        "gemini": ["Match protagonist voice (Algenib, Puck, etc.)"],
         "fish_audio": ["Match protagonist voice"],
         "chatterbox": ["Match protagonist voice"],
         "orpheus_3b": ["Match protagonist voice"]
       },
-      "recommended_tags": ["[whispers]", "[sighs]", "[short pause]"],
-      "forbidden_intimate_tags": ["[shouting]", "[theatrical]"]
+      "recommended_tags": ["[low, voiced]", "[sighs]", "[short pause]"],
+      "forbidden_intimate_tags": ["[whispers]", "[shouting]", "[theatrical]"]
     }
   ]
 }
