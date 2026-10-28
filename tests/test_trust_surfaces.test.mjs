@@ -89,11 +89,12 @@ test("AgeGateModal enforces 18+ statutory verification and persistence", () => {
 test("AgeGateModal DOM creation contains transparent, non-manipulative copy", () => {
   const gate = new AgeGateModal();
   const el = gate.mount();
-  // Copy lives in src/i18n.ts (EN table) after the JGF-129 i18n migration.
-  assert.match(el.innerHTML, /Adult Fiction & Audio Romance/);
+  // Copy lives in src/i18n.ts (EN table) after the JGF-129 i18n migration;
+  // wording follows the JGF-132 tone-gate verdict (single billing descriptor).
+  assert.match(el.innerHTML, /Adult Erotic Audio/);
   assert.match(el.innerHTML, /18\+ Restricted Audience/);
   assert.match(el.innerHTML, /I am 18 or older/);
-  assert.match(el.innerHTML, /JGF MEDIA/);
+  assert.match(el.innerHTML, /LUL MEDIA QC/);
 });
 
 test("CryptoTrustPayment state machine and supported rails", () => {
