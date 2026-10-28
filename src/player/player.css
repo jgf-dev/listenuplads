@@ -1,0 +1,366 @@
+/**
+ * Player surface styles — token-driven (see tokens.css).
+ * Lenses applied: token discipline, visual hierarchy, spacing scale,
+ * WCAG AA (44px targets, focus rings), state completeness, reduced motion.
+ */
+
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 480px; /* content column; reads as one surface on mobile and desktop */
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-10);
+}
+
+/* ---- now playing ------------------------------------------------------ */
+
+.player__card {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  background: var(--color-charcoal);
+  border: 1px solid var(--color-mist-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-player);
+}
+
+.player__cover-wrap {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-ember-border);
+}
+
+.player__cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.player__meta {
+  min-width: 0;
+}
+
+.player__series {
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ember-soft);
+  margin: 0 0 var(--space-1);
+}
+
+.player__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--color-bone);
+  margin: 0 0 var(--space-2);
+}
+
+.player__trope {
+  font-size: var(--text-sm);
+  color: var(--color-ash);
+  margin: 0;
+}
+
+/* ---- scrubber --------------------------------------------------------- */
+
+.player__scrubber {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.player__time {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  color: var(--color-ash);
+  min-width: 44px; /* keeps the scrubber stable as values change */
+}
+
+.player__time--remaining {
+  text-align: right;
+}
+
+.player__range {
+  flex: 1;
+  appearance: none;
+  height: var(--touch-target); /* full-height hit area */
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+
+.player__range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to right,
+    var(--color-ember-soft) var(--fill, 0%),
+    var(--color-charcoal-2) var(--fill, 0%)
+  );
+}
+
+.player__range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: var(--color-ember-soft);
+  border: 2px solid var(--color-ink);
+}
+
+.player__range::-moz-range-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-charcoal-2);
+}
+
+.player__range::-moz-range-progress {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-ember-soft);
+}
+
+.player__range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ember-soft);
+  border: 2px solid var(--color-ink);
+}
+
+/* ---- transport -------------------------------------------------------- */
+
+.player__transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+}
+
+.player__transport-btn {
+  position: relative;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--color-mist);
+  background: var(--color-charcoal);
+  color: var(--color-bone);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    filter var(--dur-fast) var(--ease-out);
+}
+
+.player__transport-btn:hover {
+  filter: brightness(1.15);
+}
+
+.player__transport-btn:active {
+  transform: scale(0.96);
+}
+
+.player__transport-btn--play {
+  width: 56px;
+  height: 56px;
+  background: var(--color-ember);
+  border-color: transparent;
+  box-shadow: 0 6px 18px -6px var(--color-ember-glow);
+}
+
+.player__transport-icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.player__transport-btn--play .player__transport-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.player__transport-icon--flip {
+  transform: scaleX(-1);
+}
+
+.player__transport-num {
+  position: absolute;
+  bottom: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-ember-soft);
+}
+
+/* ---- secondary controls (speed / sleep) -------------------------------- */
+
+.player__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.player__group-label {
+  display: block;
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+  margin-bottom: var(--space-2);
+}
+
+.player__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.player__chip {
+  min-height: var(--touch-target);
+  min-width: var(--touch-target);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-mist);
+  background: var(--color-charcoal);
+  color: var(--color-bone);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.player__chip:hover {
+  border-color: var(--color-ember-border);
+}
+
+.player__chip[aria-pressed="true"] {
+  background: var(--color-ember);
+  border-color: transparent;
+  color: var(--color-bone);
+}
+
+.player__sleep-status {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-ember-soft);
+  min-height: 1.2em; /* reserved so the layout never jumps */
+}
+
+/* ---- status / errors --------------------------------------------------- */
+
+.player__status {
+  margin: 0;
+  min-height: 1.45em; /* reserved: loading/error text must not shift layout */
+  font-size: var(--text-sm);
+  color: var(--color-ash);
+  text-align: center;
+}
+
+/* ---- queue -------------------------------------------------------------- */
+
+.player__queue-heading {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-bone);
+  margin: 0 0 var(--space-3);
+}
+
+.player__queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.player__queue-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-bone);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.player__queue-button:hover {
+  background: var(--color-charcoal);
+}
+
+.player__queue-item[data-active] .player__queue-button {
+  background: var(--color-charcoal);
+  border-color: var(--color-ember-border);
+}
+
+.player__queue-play {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-charcoal-2);
+  color: var(--color-ember-soft);
+}
+
+.player__queue-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.player__queue-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.player__queue-title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player__queue-sub {
+  font-size: var(--text-xs);
+  color: var(--color-ash);
+}
+
+/* ---- focus & motion ----------------------------------------------------- */
+
+.player :is(button, input):focus-visible {
+  outline: 2px solid var(--color-ember-soft);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player *,
+  .player *::before,
+  .player *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
