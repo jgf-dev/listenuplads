@@ -1,0 +1,481 @@
+/**
+ * Player surface styles — token-driven (--token-* from src/tokens.ts).
+ * Lenses applied: token discipline, visual hierarchy, spacing scale,
+ * WCAG AA (44px targets, focus rings), state completeness, reduced motion.
+ *
+ * The accent is --token-accent-dynamic: Electric Lavender in story mode,
+ * Amber Gold in Aftercare mode. Registered via @property in style.css so the
+ * 400ms crossfade interpolates color instead of snapping.
+ */
+
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-6);
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: var(--token-space-4) var(--token-space-5) var(--token-space-10);
+}
+
+/* Aftercare mode: flip the dynamic accent lavender → amber. The var is a
+   registered <color> (style.css @property), and every accented child
+   transitions its own color/background/box-shadow on --token-dur-slow, so
+   the whole surface crossfades inside the 250–400ms spec band. */
+.player[data-mode="aftercare"] {
+  --token-accent-dynamic: var(--token-accent-warmth);
+}
+
+/* ---- now playing ------------------------------------------------------ */
+
+.player__card {
+  display: flex;
+  gap: var(--token-space-4);
+  align-items: center;
+  background: var(--token-bg-card);
+  border: 1px solid var(--token-border-subtle);
+  border-radius: var(--token-radius-lg);
+  padding: var(--token-space-4);
+  box-shadow:
+    0 14px 34px -10px rgba(0, 0, 0, 0.8),
+    0 0 24px -8px var(--token-accent-dynamic);
+  transition: box-shadow var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__cover-wrap {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--token-radius-md);
+  overflow: hidden;
+  border: 1px solid var(--token-border-accent);
+}
+
+.player__cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.player__meta {
+  min-width: 0; /* FR titles wrap instead of clipping */
+}
+
+.player__series {
+  font-size: var(--token-text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--token-accent-dynamic);
+  margin: 0 0 var(--token-space-1);
+  transition: color var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__title {
+  font-family: var(--token-font-display);
+  font-size: var(--token-text-lg);
+  font-weight: 600;
+  line-height: var(--token-leading-tight);
+  color: var(--token-text-primary);
+  margin: 0 0 var(--token-space-2);
+}
+
+.player__trope {
+  font-size: var(--token-text-sm);
+  color: var(--token-text-secondary);
+  margin: 0;
+}
+
+/* ---- scrubber --------------------------------------------------------- */
+
+.player__scrubber {
+  display: flex;
+  align-items: center;
+  gap: var(--token-space-3);
+}
+
+.player__time {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--token-text-xs);
+  color: var(--token-text-secondary);
+  min-width: var(--token-touch-min); /* stable as values change */
+}
+
+.player__time--remaining {
+  text-align: right;
+}
+
+.player__range {
+  flex: 1;
+  appearance: none;
+  height: var(--token-touch-min); /* full-height hit area */
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+
+.player__range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--token-radius-full);
+  background: linear-gradient(
+    to right,
+    var(--token-accent-dynamic) var(--fill, 0%),
+    var(--token-bg-elevated) var(--fill, 0%)
+  );
+  transition: background var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: var(--token-accent-dynamic);
+  border: 2px solid var(--token-bg-app);
+  transition: background var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__range::-moz-range-track {
+  height: 6px;
+  border-radius: var(--token-radius-full);
+  background: var(--token-bg-elevated);
+}
+
+.player__range::-moz-range-progress {
+  height: 6px;
+  border-radius: var(--token-radius-full);
+  background: var(--token-accent-dynamic);
+}
+
+.player__range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--token-accent-dynamic);
+  border: 2px solid var(--token-bg-app);
+}
+
+/* ---- transport -------------------------------------------------------- */
+
+.player__transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--token-space-6);
+}
+
+.player__transport-btn {
+  position: relative;
+  width: var(--token-touch-min);
+  height: var(--token-touch-min);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--token-border-subtle);
+  background: var(--token-bg-card);
+  color: var(--token-text-primary);
+  cursor: pointer;
+  transition:
+    transform var(--token-dur-fast) var(--token-ease-default),
+    background var(--token-dur-slow) var(--token-ease-default),
+    filter var(--token-dur-fast) var(--token-ease-default);
+}
+
+.player__transport-btn:hover {
+  filter: brightness(1.15);
+}
+
+.player__transport-btn:active {
+  transform: scale(0.96);
+}
+
+.player__transport-btn--play {
+  width: 56px;
+  height: 56px;
+  background: var(--token-accent-dynamic);
+  color: var(--token-text-on-accent);
+  border-color: transparent;
+  box-shadow: 0 6px 18px -6px var(--token-accent-dynamic);
+}
+
+.player__transport-icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.player__transport-btn--play .player__transport-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.player__transport-icon--flip {
+  transform: scaleX(-1);
+}
+
+.player__transport-num {
+  position: absolute;
+  bottom: 2px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--token-accent-dynamic);
+  transition: color var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__transport-btn--play .player__transport-num {
+  color: var(--token-text-on-accent);
+}
+
+/* ---- aftercare / warmth toggle ----------------------------------------- */
+
+.player__aftercare {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.player__aftercare-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--token-space-2);
+  min-height: var(--token-touch-min);
+  padding: 0 var(--token-space-5);
+  border-radius: var(--token-radius-full);
+  border: 1px solid var(--token-border-subtle);
+  background: var(--token-bg-elevated);
+  color: var(--token-accent-dynamic);
+  font-size: var(--token-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color var(--token-dur-slow) var(--token-ease-default),
+    border-color var(--token-dur-slow) var(--token-ease-default),
+    background var(--token-dur-slow) var(--token-ease-default),
+    box-shadow var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__aftercare-btn:hover {
+  border-color: var(--token-border-accent);
+}
+
+.player__aftercare-btn[aria-pressed="true"] {
+  background: var(--token-accent-warmth);
+  border-color: transparent;
+  color: var(--token-text-on-accent);
+  box-shadow: 0 0 24px -6px var(--token-accent-warmth);
+}
+
+.player__aftercare-btn[data-unavailable] {
+  color: var(--token-text-muted);
+  cursor: not-allowed;
+}
+
+.player__aftercare-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Tooltip: visible on hover/focus so the disabled state explains itself. */
+.player__aftercare-tip {
+  position: absolute;
+  bottom: calc(100% + var(--token-space-2));
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  width: max-content;
+  max-width: min(320px, 84vw);
+  margin: 0;
+  padding: var(--token-space-2) var(--token-space-3);
+  border-radius: var(--token-radius-md);
+  border: 1px solid var(--token-border-subtle);
+  background: var(--token-bg-elevated);
+  color: var(--token-text-secondary);
+  font-size: var(--token-text-xs);
+  line-height: var(--token-leading-body);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--token-dur-fast) var(--token-ease-default),
+    transform var(--token-dur-fast) var(--token-ease-default);
+}
+
+.player__aftercare:hover .player__aftercare-tip,
+.player__aftercare:focus-within .player__aftercare-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---- secondary controls (speed / sleep) -------------------------------- */
+
+.player__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-5);
+}
+
+.player__group-label {
+  display: block;
+  font-size: var(--token-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--token-text-secondary);
+  margin-bottom: var(--token-space-2);
+}
+
+.player__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--token-space-2);
+}
+
+.player__chip {
+  min-height: var(--token-touch-min);
+  min-width: var(--token-touch-min);
+  padding: 0 var(--token-space-4);
+  border-radius: var(--token-radius-full);
+  border: 1px solid var(--token-border-subtle);
+  background: var(--token-bg-elevated);
+  color: var(--token-text-primary);
+  font-size: var(--token-text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--token-dur-fast) var(--token-ease-default),
+    border-color var(--token-dur-fast) var(--token-ease-default);
+}
+
+.player__chip:hover {
+  border-color: var(--token-border-accent);
+}
+
+.player__chip[aria-pressed="true"] {
+  background: var(--token-accent-dynamic);
+  border-color: transparent;
+  color: var(--token-text-on-accent);
+}
+
+.player__sleep-status {
+  margin: var(--token-space-2) 0 0;
+  font-size: var(--token-text-xs);
+  color: var(--token-accent-dynamic);
+  min-height: 1.2em; /* reserved so the layout never jumps */
+}
+
+/* ---- status / errors --------------------------------------------------- */
+
+.player__status {
+  margin: 0;
+  min-height: 1.45em; /* reserved: loading/error text must not shift layout */
+  font-size: var(--token-text-sm);
+  color: var(--token-text-secondary);
+  text-align: center;
+}
+
+/* ---- story shelf (filterable queue) ------------------------------------- */
+
+.player__queue-heading {
+  font-family: var(--token-font-display);
+  font-size: var(--token-text-md);
+  font-weight: 600;
+  color: var(--token-text-primary);
+  margin: 0 0 var(--token-space-3);
+}
+
+.player__queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-2);
+}
+
+.player__queue-empty {
+  padding: var(--token-space-6) var(--token-space-4);
+  border: 1px dashed var(--token-border-subtle);
+  border-radius: var(--token-radius-md);
+  color: var(--token-text-secondary);
+  font-size: var(--token-text-sm);
+  text-align: center;
+}
+
+.player__queue-button {
+  display: flex;
+  align-items: center;
+  gap: var(--token-space-3);
+  width: 100%;
+  min-height: var(--token-touch-min);
+  padding: var(--token-space-2) var(--token-space-3);
+  border-radius: var(--token-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--token-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--token-dur-fast) var(--token-ease-default);
+}
+
+.player__queue-button:hover {
+  background: var(--token-bg-card);
+}
+
+.player__queue-item[data-active] .player__queue-button {
+  background: var(--token-bg-card);
+  border-color: var(--token-border-accent);
+}
+
+.player__queue-play {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--token-bg-elevated);
+  color: var(--token-accent-dynamic);
+  transition: color var(--token-dur-slow) var(--token-ease-default);
+}
+
+.player__queue-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.player__queue-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.player__queue-title {
+  font-size: var(--token-text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player__queue-sub {
+  font-size: var(--token-text-xs);
+  color: var(--token-text-secondary);
+}
+
+/* ---- focus & motion ----------------------------------------------------- */
+
+.player :is(button, input):focus-visible {
+  outline: 2px solid var(--token-accent-dynamic);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player *,
+  .player *::before,
+  .player *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
