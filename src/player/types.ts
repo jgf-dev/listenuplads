@@ -1,6 +1,16 @@
 /** Shared player types and constants. */
 
-export interface Track {
+import type { StoryFacets } from "../discovery/types.ts";
+
+/** Aftercare/Warmth stem paired with a story (metadata lives on the story). */
+export interface AftercarePairing {
+  /** Audio URL of the paired aftercare stem. */
+  src: string;
+  /** Display title, e.g. "Aftercare — Vacation, Scene 1". */
+  title: string;
+}
+
+export interface Track extends StoryFacets {
   /** Stable story id, e.g. "story-3-penthouse-elevator". Used in telemetry. */
   id: string;
   title: string;
@@ -14,6 +24,11 @@ export interface Track {
   src: string;
   /** Cover art URL for the player surface and MediaSession lockscreen. */
   cover: string;
+  /**
+   * Paired Aftercare/Warmth stem. Null/absent means the story has no pairing
+   * yet — the toggle renders disabled with an explaining tooltip, never hidden.
+   */
+  aftercare?: AftercarePairing | null;
 }
 
 export const PLAYBACK_SPEEDS = [1, 1.25, 1.5, 2] as const;

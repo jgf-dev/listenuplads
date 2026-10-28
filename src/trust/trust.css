@@ -1,0 +1,483 @@
+/**
+ * listenuplads Trust Surfaces Styling
+ * Pure CSS implementing JGF-15 tokens and adult-compliance UX standards.
+ */
+
+/* 1. Age-Gate Modal */
+dialog.listenuplads-agegate {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: auto;
+  max-width: 440px;
+  width: calc(100% - 32px);
+  color: var(--token-text-primary, #f5eef8);
+  font-family: var(--token-font-sans, "Outfit", sans-serif);
+}
+
+dialog.listenuplads-agegate::backdrop {
+  background: rgba(10, 7, 15, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.agegate-card {
+  background: var(--token-bg-card, #15101f);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  border-radius: var(--token-radius-xl, 24px);
+  padding: 32px 24px 28px;
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(216, 180, 254, 0.15);
+  text-align: center;
+}
+
+.agegate-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--token-accent-primary, #d8b4fe);
+  background: rgba(216, 180, 254, 0.12);
+  border: 1px solid rgba(216, 180, 254, 0.3);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 16px;
+}
+
+.agegate-title {
+  font-family: var(--token-font-display, Georgia, serif);
+  font-size: 26px;
+  line-height: 1.25;
+  margin: 0 0 14px;
+  color: var(--token-text-primary, #f5eef8);
+}
+
+.agegate-body {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--token-text-secondary, #b3a5c4);
+  margin: 0 0 24px;
+}
+
+.agegate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.agegate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: var(--token-radius-md, 12px);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: none;
+}
+
+.agegate-btn:focus-visible {
+  outline: 2px solid var(--token-focus, #d8b4fe);
+  outline-offset: 2px;
+}
+
+.agegate-btn-primary {
+  background: linear-gradient(90deg, #d8b4fe, #ff6ea9);
+  color: #120a1a;
+}
+
+.agegate-btn-primary:hover {
+  opacity: 0.94;
+  transform: translateY(-1px);
+}
+
+.agegate-btn-secondary {
+  background: transparent;
+  color: var(--token-text-muted, #7b6f8e);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+}
+
+.agegate-btn-secondary:hover {
+  color: var(--token-text-primary, #f5eef8);
+  border-color: rgba(216, 180, 254, 0.4);
+}
+
+.agegate-disclaimer {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--token-text-muted, #7b6f8e);
+  margin: 0;
+}
+
+/* 2. Geoblock Notice */
+.listenuplads-geoblock {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--token-bg-app, #0a070f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: var(--token-font-sans, "Outfit", sans-serif);
+  color: var(--token-text-primary, #f5eef8);
+}
+
+.geoblock-card {
+  max-width: 440px;
+  width: 100%;
+  background: var(--token-bg-card, #15101f);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  border-radius: var(--token-radius-xl, 24px);
+  padding: 36px 28px 28px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.geoblock-icon {
+  margin-bottom: 20px;
+  color: var(--token-accent-warm, #ffc460);
+  display: flex;
+  justify-content: center;
+}
+
+.geoblock-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--token-accent-warm, #ffc460);
+  background: rgba(255, 196, 96, 0.12);
+  border: 1px solid rgba(255, 196, 96, 0.3);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 16px;
+}
+
+.geoblock-title {
+  font-family: var(--token-font-display, Georgia, serif);
+  font-size: 28px;
+  margin: 0 0 14px;
+  color: var(--token-text-primary, #f5eef8);
+}
+
+.geoblock-body {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--token-text-secondary, #b3a5c4);
+  margin: 0 0 28px;
+}
+
+.geoblock-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 28px;
+  background: var(--token-bg-elevated, #201830);
+  color: var(--token-text-primary, #f5eef8);
+  border: 1px solid rgba(216, 180, 254, 0.3);
+  border-radius: var(--token-radius-md, 12px);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.geoblock-footer {
+  margin-top: 24px;
+  font-size: 11.5px;
+  color: var(--token-text-muted, #7b6f8e);
+}
+
+/* 3. Crypto Checkout Trust Modal */
+.listenuplads-checkout-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-family: var(--token-font-sans, "Outfit", sans-serif);
+}
+
+.checkout-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 7, 15, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+.checkout-card {
+  position: relative;
+  z-index: 1;
+  max-width: 440px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--token-bg-card, #15101f);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  border-radius: var(--token-radius-xl, 24px);
+  padding: 28px 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  color: var(--token-text-primary, #f5eef8);
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--token-success, #7ee2b8);
+  background: rgba(126, 226, 184, 0.12);
+  border: 1px solid rgba(126, 226, 184, 0.3);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+.checkout-title {
+  font-family: var(--token-font-display, Georgia, serif);
+  font-size: 24px;
+  margin: 0 0 6px;
+}
+
+.checkout-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--token-accent-primary, #d8b4fe);
+}
+
+.currency-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 8px;
+  margin: 12px 0 18px;
+}
+
+.currency-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: 10px;
+  background: var(--token-bg-elevated, #201830);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  color: var(--token-text-primary, #f5eef8);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.currency-pill.selected {
+  border-color: var(--token-accent-primary, #d8b4fe);
+  background: rgba(216, 180, 254, 0.15);
+  box-shadow: 0 0 0 1px var(--token-accent-primary, #d8b4fe);
+}
+
+.currency-pill small {
+  font-size: 10px;
+  color: var(--token-text-muted, #7b6f8e);
+  margin-top: 2px;
+}
+
+.conversion-summary {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 18px;
+}
+
+.conversion-summary span {
+  font-size: 15px;
+}
+
+.conversion-summary small {
+  font-size: 11.5px;
+  color: var(--token-text-muted, #7b6f8e);
+}
+
+.checkout-btn {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 120ms ease;
+}
+
+.checkout-btn-primary {
+  background: linear-gradient(90deg, #d8b4fe, #ff6ea9);
+  color: #120a1a;
+}
+
+.checkout-btn-quiet {
+  background: transparent;
+  color: var(--token-text-muted, #7b6f8e);
+  margin-top: 8px;
+}
+
+.checkout-btn-simulate {
+  background: var(--token-bg-elevated, #201830);
+  color: var(--token-accent-warm, #ffc460);
+  border: 1px dashed var(--token-accent-warm, #ffc460);
+  margin-top: 10px;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: var(--token-text-muted, #7b6f8e);
+}
+
+.stepper .step.active {
+  color: var(--token-accent-primary, #d8b4fe);
+  font-weight: 700;
+}
+
+.stepper .step.done {
+  color: var(--token-success, #7ee2b8);
+}
+
+.qr-placeholder {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.qr-box {
+  width: 140px;
+  height: 140px;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px;
+}
+
+.deposit-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.deposit-box label {
+  font-size: 12px;
+  color: var(--token-text-secondary, #b3a5c4);
+}
+
+.copy-row {
+  display: flex;
+  gap: 8px;
+}
+
+.copy-row input {
+  flex: 1;
+  background: #0d0a14;
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--token-text-primary, #f5eef8);
+  font-family: var(--token-font-mono, monospace);
+  font-size: 13px;
+}
+
+.copy-btn {
+  min-width: 68px;
+  background: var(--token-bg-elevated, #201830);
+  border: 1px solid var(--token-border-subtle, #2d2342);
+  color: var(--token-accent-primary, #d8b4fe);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.listener-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--token-text-secondary, #b3a5c4);
+  margin-bottom: 16px;
+}
+
+.pulse-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--token-accent-primary, #d8b4fe);
+  box-shadow: 0 0 8px var(--token-accent-primary, #d8b4fe);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+.checkout-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--token-border-subtle, #2d2342);
+}
+
+.discreet-guarantee {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--token-text-secondary, #b3a5c4);
+}
+
+.guarantee-icon {
+  color: var(--token-success, #7ee2b8);
+  font-weight: 700;
+}
+
+/* Tier-2 statutory gate: live-region status line (verifying / failed). */
+.agegate-status {
+  margin: var(--token-space-3, 12px) 0 0;
+  min-height: 1.45em; /* reserve a line so status swaps never shift layout */
+  font-size: var(--token-text-sm, 14px);
+  color: var(--token-text-secondary, #b3a5c4);
+}
