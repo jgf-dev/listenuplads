@@ -1,0 +1,180 @@
+/**
+ * CheckoutModal — split checkout rails (card / crypto) dialog chrome.
+ * The embedded CryptoTrustPayment flow reuses trust.css; this sheet styles
+ * the dialog chrome, the tab switcher, and the per-rail trust banners.
+ *
+ * Token discipline: every value is a --token-* custom property. Bilingual
+ * rule: text rows flex-wrap + min-height (never fixed heights) so 20–35%
+ * longer French copy flows instead of clipping; max width follows the 430px
+ * content column.
+ */
+
+.checkout-dialog {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: min(430px, 100vw);
+  width: 100%;
+  margin: auto;
+  color: var(--token-text-primary);
+}
+
+.checkout-dialog::backdrop {
+  background: rgba(10, 7, 15, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.checkout-dialog__card {
+  background: var(--token-bg-card);
+  border: 1px solid var(--token-border-subtle);
+  border-radius: var(--token-radius-lg);
+  padding: var(--token-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-4);
+  max-height: calc(100svh - 2 * var(--token-space-6));
+  overflow-y: auto;
+}
+
+.checkout-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--token-space-3);
+}
+
+.checkout-dialog__title {
+  margin: 0;
+  font-family: var(--token-font-display);
+  font-size: var(--token-text-lg);
+  line-height: var(--token-leading-tight);
+}
+
+.checkout-dialog__price {
+  margin: var(--token-space-1) 0 0;
+  color: var(--token-text-secondary);
+  font-size: var(--token-text-sm);
+}
+
+/* Tab switcher — segmented control. Active tab gets the luminous accent fill
+   with dark text (same active-language as discovery chips). */
+.checkout-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--token-space-1);
+  padding: var(--token-space-1);
+  background: var(--token-bg-elevated);
+  border-radius: var(--token-radius-full);
+}
+
+.checkout-tabs__tab {
+  flex: 1 1 auto;
+  min-height: var(--token-touch-min);
+  padding: var(--token-space-2) var(--token-space-4);
+  border: none;
+  border-radius: var(--token-radius-full);
+  background: transparent;
+  color: var(--token-text-secondary);
+  font-size: var(--token-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: normal; /* FR labels wrap instead of clipping */
+  transition:
+    background var(--token-dur-normal) var(--token-ease-default),
+    color var(--token-dur-normal) var(--token-ease-default);
+}
+
+.checkout-tabs__tab[aria-selected="true"] {
+  background: var(--token-accent-primary);
+  color: var(--token-text-on-accent);
+}
+
+.checkout-tabs__tab:focus-visible {
+  outline: 2px solid var(--token-focus);
+  outline-offset: 2px;
+}
+
+.checkout-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-4);
+}
+
+.crypto-host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-4);
+}
+
+/* Trust banner — the honest per-rail promise, lock icon in the rail accent. */
+.checkout-trust-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--token-space-3);
+  padding: var(--token-space-4);
+  background: var(--token-bg-elevated);
+  border: 1px solid var(--token-border-accent);
+  border-radius: var(--token-radius-md);
+  color: var(--token-accent-primary);
+}
+
+.checkout-trust-banner--crypto {
+  color: var(--token-accent-warmth);
+  border-color: var(--token-border-warmth);
+}
+
+.checkout-trust-banner svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkout-trust-banner__title {
+  margin: 0 0 var(--token-space-1);
+  font-weight: 700;
+  font-size: var(--token-text-sm);
+  color: var(--token-text-primary);
+}
+
+.checkout-trust-banner__body {
+  margin: 0;
+  font-size: var(--token-text-sm);
+  line-height: var(--token-leading-body);
+  color: var(--token-text-secondary);
+}
+
+.checkout-facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-3);
+}
+
+.checkout-facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--token-space-2);
+  font-size: var(--token-text-sm);
+  line-height: var(--token-leading-body);
+  color: var(--token-text-secondary);
+}
+
+.checkout-facts svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--token-success);
+}
+
+.checkout-note {
+  margin: 0;
+  font-size: var(--token-text-sm);
+  color: var(--token-accent-warmth);
+}
+
+.checkout-ledger-note {
+  margin: 0;
+  font-size: var(--token-text-xs);
+  line-height: var(--token-leading-body);
+  color: var(--token-text-muted);
+}

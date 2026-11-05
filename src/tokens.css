@@ -1,0 +1,68 @@
+/**
+ * Listen Up Lads — design tokens
+ * Source direction: concepts/fable.css (Design Lead visual exploration).
+ * Dark-only, intimate palette. Contrast verified against --ink / --charcoal:
+ *   bone 15.07 / 13.93 (AAA), ash 7.50 / 6.93 (AA+),
+ *   ember-soft 7.85 / 7.26 (AA), ember 4.42 (large text & fills only),
+ *   bone-on-ember 3.41 (icons/large glyphs only — never small text).
+ */
+:root {
+  /* color: surfaces */
+  --color-ink: #121014; /* app background */
+  --color-charcoal: #1c1917; /* raised surface (player, cards) */
+  --color-charcoal-2: #262220; /* inset surface (scrubber track, chips) */
+
+  /* color: text */
+  --color-bone: #e7e5e4; /* primary text */
+  --color-ash: #a8a29e; /* secondary text — safe at small sizes on ink/charcoal */
+
+  /* color: accent */
+  --color-ember: #c45c26; /* primary action fill (bone glyph on top) */
+  --color-ember-soft: #e29652; /* accent text/icons/focus ring on dark */
+  --color-ember-glow: rgba(196, 92, 38, 0.35);
+  --color-ember-border: rgba(226, 150, 82, 0.35);
+
+  /* color: lines & overlays */
+  --color-mist: rgba(231, 229, 228, 0.12); /* borders */
+  --color-mist-soft: rgba(231, 229, 228, 0.07); /* hairlines */
+  --color-veil: rgba(28, 25, 23, 0.94); /* translucent charcoal (sticky surfaces) */
+
+  /* typography */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-ui: "Outfit", "Satoshi", system-ui, sans-serif;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --leading-tight: 1.2;
+  --leading-body: 1.45;
+
+  /* spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* elevation */
+  --shadow-player: 0 14px 34px -10px rgba(0, 0, 0, 0.8), 0 0 20px -5px var(--color-ember-glow);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-med: 300ms;
+
+  /* accessibility */
+  --touch-target: 44px; /* WCAG 2.5.8 minimum */
+}

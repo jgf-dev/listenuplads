@@ -1,0 +1,266 @@
+/**
+ * Discovery surfaces — floating filter rail + bottom-sheet filter drawer.
+ * Chips: 44px touch targets; inactive translucent bg-elevated, active luminous
+ * accent fill with dark text. All text rows flex-wrap + min-height so French
+ * strings (20–35% longer) never clip; chip labels scale down to 13px via
+ * --token-text-chip.
+ */
+
+.discovery {
+  position: sticky;
+  top: var(--token-space-2);
+  z-index: 20;
+  padding: 0 var(--token-space-5);
+}
+
+.discovery__rail {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--token-space-2);
+  padding: var(--token-space-2);
+  border-radius: var(--token-radius-full);
+  border: 1px solid var(--token-border-subtle);
+  background: color-mix(in srgb, var(--token-bg-card) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+}
+
+.discovery__filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--token-space-2);
+  min-height: var(--token-touch-min);
+  padding: 0 var(--token-space-4);
+  border-radius: var(--token-radius-full);
+  border: none;
+  background: var(--token-accent-primary);
+  color: var(--token-text-on-accent);
+  font-size: var(--token-text-chip);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.discovery__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--token-space-1);
+  border-radius: var(--token-radius-full);
+  background: var(--token-text-on-accent);
+  color: var(--token-accent-primary);
+  font-size: var(--token-text-xs);
+  font-weight: 800;
+}
+
+.discovery__active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--token-space-2);
+  min-width: 0;
+}
+
+.discovery__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--token-space-1);
+  min-height: var(--token-touch-min);
+  padding: 0 var(--token-space-4);
+  border-radius: var(--token-radius-full);
+  border: 1px solid var(--token-border-subtle);
+  background: color-mix(in srgb, var(--token-bg-elevated) 72%, transparent);
+  color: var(--token-text-primary);
+  font-size: var(--token-text-chip);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--token-dur-fast) var(--token-ease-default),
+    border-color var(--token-dur-fast) var(--token-ease-default),
+    color var(--token-dur-fast) var(--token-ease-default);
+}
+
+.discovery__chip:hover {
+  border-color: var(--token-border-accent);
+}
+
+.discovery__chip[aria-pressed="true"],
+.discovery__chip--active {
+  background: var(--token-accent-primary);
+  border-color: transparent;
+  color: var(--token-text-on-accent);
+}
+
+.discovery__chip--active {
+  padding-right: var(--token-space-3);
+}
+
+.discovery__chip-x {
+  font-size: var(--token-text-md);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.discovery__chip--heat {
+  gap: 2px;
+}
+
+.chip__ember {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+
+/* ---- drawer (bottom sheet on mobile, centered panel on wide viewports) --- */
+
+.discovery__drawer {
+  border: none;
+  padding: 0;
+  margin: auto auto 0 auto; /* bottom sheet */
+  width: 100%;
+  max-width: 430px;
+  max-height: 86svh;
+  background: transparent;
+  color: var(--token-text-primary);
+}
+
+.discovery__drawer::backdrop {
+  background: rgba(10, 7, 15, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@media (min-width: 640px) {
+  .discovery__drawer {
+    margin: auto; /* centered panel on desktop */
+  }
+}
+
+.discovery__sheet {
+  display: flex;
+  flex-direction: column;
+  max-height: 86svh;
+  border: 1px solid var(--token-border-subtle);
+  border-radius: var(--token-radius-xl) var(--token-radius-xl) 0 0;
+  background: var(--token-bg-card);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .discovery__sheet {
+    border-radius: var(--token-radius-xl);
+  }
+}
+
+.discovery__sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--token-space-3);
+  padding: var(--token-space-5) var(--token-space-5) var(--token-space-2);
+}
+
+.discovery__title {
+  font-family: var(--token-font-display);
+  font-size: var(--token-text-lg);
+  margin: 0 0 var(--token-space-1);
+}
+
+.discovery__sub {
+  margin: 0;
+  font-size: var(--token-text-sm);
+  color: var(--token-text-secondary);
+}
+
+.discovery__close {
+  flex-shrink: 0;
+  width: var(--token-touch-min);
+  height: var(--token-touch-min);
+  border-radius: 50%;
+  border: 1px solid var(--token-border-subtle);
+  background: var(--token-bg-elevated);
+  color: var(--token-text-secondary);
+  font-size: var(--token-text-lg);
+  cursor: pointer;
+}
+
+.discovery__groups {
+  overflow-y: auto;
+  padding: var(--token-space-2) var(--token-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--token-space-4);
+}
+
+.discovery__group {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.discovery__legend {
+  font-size: var(--token-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--token-text-secondary);
+  margin-bottom: var(--token-space-2);
+  padding: 0;
+}
+
+.discovery__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--token-space-2);
+}
+
+.discovery__sheet-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--token-space-3);
+  padding: var(--token-space-4) var(--token-space-5) var(--token-space-5);
+  border-top: 1px solid var(--token-border-subtle);
+}
+
+.discovery__clear {
+  min-height: var(--token-touch-min);
+  padding: 0 var(--token-space-4);
+  border: none;
+  background: transparent;
+  color: var(--token-text-muted);
+  font-size: var(--token-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.discovery__clear:hover {
+  color: var(--token-text-primary);
+}
+
+.discovery__apply {
+  flex: 1;
+  min-width: min(200px, 100%);
+  min-height: var(--token-touch-min);
+  padding: 0 var(--token-space-5);
+  border: none;
+  border-radius: var(--token-radius-md);
+  background: linear-gradient(90deg, var(--token-accent-primary), var(--token-accent-secondary));
+  color: var(--token-text-on-accent);
+  font-size: var(--token-text-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.discovery__drawer :is(button):focus-visible,
+.discovery :is(button):focus-visible {
+  outline: 2px solid var(--token-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discovery *,
+  .discovery__drawer * {
+    transition-duration: 0.01ms !important;
+  }
+}

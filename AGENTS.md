@@ -24,4 +24,17 @@ release. Add a tool name to select part of the graph. For example, run
 - [ ] Check if there are `vite.config.ts` tasks or `package.json` scripts necessary for validation, run via `vp run <script>`.
 - [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
 
+## Runner notes (shared 1-CPU / ~6GB box)
+
+- `vp lint` (and therefore the `.vite-hooks/pre-commit` hook) can panic before analysis with
+  `oxc_allocator/src/pool/fixed_size.rs:112: called Result::unwrap() on an Err value: ()`.
+  Root cause: with lint `jsPlugins` configured, oxlint's fixed-size allocator path reserves ~6 GiB of
+  virtual address space with a plain `MAP_PRIVATE|MAP_ANONYMOUS` mmap (no `MAP_NORESERVE`). Linux
+  heuristic overcommit (`vm.overcommit_memory=0`) rejects a single mapping larger than total RAM + swap,
+  so on boxes with <6 GiB RAM and no swap this fails deterministically (strace shows `mmap(NULL, 6442455040) = -1 ENOMEM`).
+  It is not load- or typeAware-related.
+- Fix on this runner: a 2 GiB swapfile at `/swapfile` persisted in `/etc/fstab` makes RAM+swap exceed 6 GiB
+  so the reservation succeeds. If the panic reappears, check `swapon --show`; recreate with
+  `sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile` (root, free).
+
 <!--VITE PLUS END-->
