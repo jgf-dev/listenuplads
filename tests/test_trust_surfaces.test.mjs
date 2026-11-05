@@ -70,6 +70,8 @@ test("Token definitions match JGF-15 design specifications", () => {
   const css = getThemeCssVariables();
   assert.match(css, /--token-bg-app: #0A070F/);
   assert.match(css, /--token-accent-primary: #D8B4FE/);
+  assert.match(css, /--token-accent-warmth: #FBBF24/);
+  assert.match(css, /--token-font-display: "Fraunces", Georgia, serif/);
   assert.match(css, /--token-touch-min: 44px/);
 });
 
@@ -122,6 +124,16 @@ test("CryptoTrustPayment state machine and supported rails", () => {
   });
   activeCheckout.transitionTo("confirmed_active");
   assert.match(completedTx, /^simulated_tx_/);
+
+  let silentCalls = 0;
+  const silentCheckout = new CryptoTrustPayment({
+    onPaymentComplete: () => {
+      silentCalls++;
+    },
+  });
+  silentCheckout.transitionTo("confirmed_active", { silent: true });
+  assert.equal(silentCalls, 0);
+  assert.equal(silentCheckout.getState(), "confirmed_active");
 });
 
 test("GeoblockNotice formats country code and provides regulatory copy", () => {

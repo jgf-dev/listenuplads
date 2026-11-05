@@ -72,7 +72,7 @@ export const listenupladsTheme = {
   },
   typography: {
     fontSans: "Outfit, Inter, system-ui, -apple-system, sans-serif",
-    fontDisplay: '"Playfair Display", Georgia, serif',
+    fontDisplay: '"Fraunces", Georgia, serif',
     fontMono: 'ui-monospace, "JetBrains Mono", monospace',
   },
 } as const;

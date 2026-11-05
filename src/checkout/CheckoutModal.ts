@@ -215,11 +215,14 @@ export class CheckoutModal {
       usdPrice: this.options.usdPrice,
       chrome: "panel",
       onCancel: () => this.close(),
-      onPaymentComplete: (txId) => this.options.onMembershipActive(txId),
+      onPaymentComplete: (txId) => {
+        this.cryptoState = "confirmed_active";
+        this.options.onMembershipActive(txId);
+      },
     });
     this.crypto.mount(host);
     if (this.cryptoState !== "select_currency") {
-      this.crypto.transitionTo(this.cryptoState);
+      this.crypto.transitionTo(this.cryptoState, { silent: true });
     }
   }
 }

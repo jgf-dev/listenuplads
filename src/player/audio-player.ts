@@ -324,8 +324,8 @@ export class AudioPlayer {
   }
 
   private bindAudioEvents(el: HTMLAudioElement): void {
-    el.addEventListener("play", () => this.onPlay());
-    el.addEventListener("pause", () => this.onPause());
+    el.addEventListener("play", () => this.onPlay(el));
+    el.addEventListener("pause", () => this.onPause(el));
     el.addEventListener("ended", () => this.onEnded(el));
     el.addEventListener("timeupdate", () => this.onTimeUpdate());
     el.addEventListener("loadedmetadata", () => this.onTimeUpdate());
@@ -655,7 +655,8 @@ export class AudioPlayer {
 
   // ------------------------------------------------------------- audio events
 
-  private onPlay(): void {
+  private onPlay(el: HTMLAudioElement): void {
+    if (el !== this.activeAudio()) return;
     const track = this.track();
     this.els.playIcon.innerHTML = `<path d="${ICONS.pause}"/>`;
     this.els.playBtn.setAttribute("aria-label", t("player.pause"));
@@ -671,7 +672,8 @@ export class AudioPlayer {
     this.syncQueueIcons();
   }
 
-  private onPause(): void {
+  private onPause(el: HTMLAudioElement): void {
+    if (el !== this.activeAudio()) return;
     const track = this.track();
     const active = this.activeAudio();
     this.els.playIcon.innerHTML = `<path d="${ICONS.play}"/>`;
@@ -766,7 +768,7 @@ export class AudioPlayer {
   private syncQueueIcons(): void {
     const paused = this.activeAudio().paused;
     this.els.queue.querySelectorAll<HTMLLIElement>(".player__queue-item").forEach((li, i) => {
-      li.querySelector(".player__queue-icon")?.setAttribute(
+      li.querySelector(".player__queue-icon path")?.setAttribute(
         "d",
         i === this.currentIndex && !paused ? ICONS.pause : ICONS.play,
       );
@@ -778,10 +780,7 @@ export class AudioPlayer {
       li.toggleAttribute("data-active", i === this.currentIndex);
       const item = this.catalog[i];
       if (item) {
-        li.querySelector("button")?.setAttribute(
-          "aria-label",
-          escapeHtml(t("player.playTrack", item.title)),
-        );
+        li.querySelector("button")?.setAttribute("aria-label", t("player.playTrack", item.title));
       }
     });
   }

@@ -106,10 +106,10 @@ export class CryptoTrustPayment {
     }
   }
 
-  public transitionTo(state: PaymentState): void {
+  public transitionTo(state: PaymentState, options?: { silent?: boolean }): void {
     this.currentState = state;
     this.render();
-    if (state === "confirmed_active") {
+    if (state === "confirmed_active" && !options?.silent) {
       this.options.onPaymentComplete("simulated_tx_" + Date.now());
     }
   }
