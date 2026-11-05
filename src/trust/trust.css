@@ -142,7 +142,7 @@ dialog.listenuplads-agegate::backdrop {
 
 .geoblock-icon {
   margin-bottom: 20px;
-  color: var(--token-accent-warm, #ffc460);
+  color: var(--token-accent-warmth, #fbbf24);
   display: flex;
   justify-content: center;
 }
@@ -152,7 +152,7 @@ dialog.listenuplads-agegate::backdrop {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--token-accent-warm, #ffc460);
+  color: var(--token-accent-warmth, #fbbf24);
   background: rgba(255, 196, 96, 0.12);
   border: 1px solid rgba(255, 196, 96, 0.3);
   padding: 4px 12px;
@@ -340,8 +340,8 @@ dialog.listenuplads-agegate::backdrop {
 
 .checkout-btn-simulate {
   background: var(--token-bg-elevated, #201830);
-  color: var(--token-accent-warm, #ffc460);
-  border: 1px dashed var(--token-accent-warm, #ffc460);
+  color: var(--token-accent-warmth, #fbbf24);
+  border: 1px dashed var(--token-accent-warmth, #fbbf24);
   margin-top: 10px;
 }
 
