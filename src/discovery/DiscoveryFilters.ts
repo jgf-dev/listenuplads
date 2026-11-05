@@ -132,7 +132,9 @@ export class DiscoveryFilters {
   }
 
   private activeChip(facet: string, id: string | number, labelHtml: string): string {
-    const plain = labelHtml.replace(/<[^>]*>/g, "").trim();
+    const labelContainer = document.createElement("div");
+    labelContainer.innerHTML = labelHtml;
+    const plain = (labelContainer.textContent ?? "").trim();
     const aria = plain.length > 0 ? plain : t("discovery.heatOption", Number(id));
     return `
       <button type="button" class="discovery__chip discovery__chip--active"
