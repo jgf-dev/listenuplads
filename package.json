@@ -7,18 +7,18 @@
     "dev": "vp dev",
     "build": "tsc && vp build",
     "preview": "vp preview",
-    "prepare": "vp config"
+    "prepare": "vp config",
+    "deploy": "cf deploy"
   },
-  "dependencies": {
-    "posthog-js": "^1.434.15"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "typescript": "~6.0.2",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.2",
-    "vite-plus": "0.3.2"
+    "@cloudflare/vite-plugin": "^2.0.0-beta.v.0",
+    "cf": "^1.0.0-beta.28",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.5.0",
+    "vite-plus": "1.5.0"
   },
   "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.2"
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.5.0"
   },
   "engines": {
     "npm": ">=11.19.0"

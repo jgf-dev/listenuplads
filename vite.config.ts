@@ -1,5 +1,7 @@
 import { defineConfig } from "vite-plus";
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 export default defineConfig({
   staged: {
     "*": "vp check --fix",
@@ -15,4 +17,5 @@ export default defineConfig({
     // tests/ is a node --test runner (plain .mjs) — keep vitest scoped to src.
     include: ["src/**/*.test.ts"],
   },
+  plugins: [cloudflare()],
 });
