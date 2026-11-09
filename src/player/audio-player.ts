@@ -388,11 +388,6 @@ export class AudioPlayer {
     index: number,
     { autoplay, reason }: { autoplay: boolean; reason: "queue" | "step" },
   ): void {
-    const from = this.track();
-    const active = this.activeAudio();
-    if (from && !active.paused && !isComplete(active.currentTime, this.duration())) {
-      ///this.reportDrop(from, "track_switch");
-    }
     this.loadTrack(index);
     if (autoplay) {
       void this.audio.play().catch(() => {
@@ -753,9 +748,6 @@ export class AudioPlayer {
   private onPageHide = (): void => {
     const track = this.track();
     const active = this.activeAudio();
-    if (track && !active.paused && !isComplete(active.currentTime, this.duration())) {
-      // this.reportDrop(track, "page_hide");
-    }
   };
 
   // ----------------------------------------------------------------- helpers
