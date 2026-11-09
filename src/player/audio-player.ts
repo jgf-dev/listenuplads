@@ -24,10 +24,9 @@ import {
 import {
   clampTime,
   formatTime,
-  isComplete,
   nextIndex,
   prevIndex,
-  progressPct,
+  //progressPct,
   resolveSleepTimer,
   skipBy,
   sleepRemainingLabel,
@@ -40,11 +39,10 @@ import {
   setPlaybackState,
   setPositionState,
 } from "./media-session.ts";
-import { telemetry } from "./telemetry.ts";
 import {
   PLAYBACK_SPEEDS,
   SLEEP_TIMER_OPTIONS,
-  type DropReason,
+  //type DropReason,
   type PlaybackSpeed,
   type SleepTimerId,
   type Track,
@@ -85,7 +83,7 @@ export class AudioPlayer {
   private mode: PlayerMode = "story";
   private speed: PlaybackSpeed = 1;
   private scrubbing = false;
-  private sleepId: SleepTimerId = "off";
+  //private sleepId: SleepTimerId = "off";
   private sleepDeadline: SleepDeadline | null = null;
   private sleepTimeout: ReturnType<typeof setTimeout> | null = null;
   private sleepTick: ReturnType<typeof setInterval> | null = null;
@@ -389,11 +387,6 @@ export class AudioPlayer {
     index: number,
     { autoplay, reason }: { autoplay: boolean; reason: "queue" | "step" },
   ): void {
-    const from = this.track();
-    const active = this.activeAudio();
-    if (from && !active.paused && !isComplete(active.currentTime, this.duration())) {
-      this.reportDrop(from, "track_switch");
-    }
     this.loadTrack(index);
     if (autoplay) {
       void this.audio.play().catch(() => {
@@ -461,8 +454,6 @@ export class AudioPlayer {
     this.els.speedBtns.forEach((b) =>
       b.setAttribute("aria-pressed", String(Number(b.dataset.speed) === speed)),
     );
-    const track = this.track();
-    if (track) telemetry.capture("playback_speed_change", { track_id: track.id, speed });
   }
 
   // ---------------------------------------------------- aftercare / warmth
@@ -486,11 +477,11 @@ export class AudioPlayer {
     const pairing = track.aftercare;
     const target: PlayerMode = result.mode;
 
-    telemetry.capture("aftercare_toggle", {
-      track_id: track.id,
-      to_mode: target,
-      position_sec: Math.round(this.activeAudio().currentTime),
-    });
+    // telemetry.capture("aftercare_toggle", {
+    //   track_id: track.id,
+    //   to_mode: target,
+    //   position_sec: Math.round(this.activeAudio().currentTime),
+    // });
 
     if (target === "aftercare") {
       const stem = this.ensureAfterAudio();
@@ -607,18 +598,18 @@ export class AudioPlayer {
 
   private setSleepTimer(id: SleepTimerId): void {
     this.clearSleepTimers();
-    this.sleepId = id;
+    //this.sleepId = id;
     this.els.sleepBtns.forEach((b) =>
       b.setAttribute("aria-pressed", String(b.dataset.sleep === id)),
     );
 
-    const track = this.track();
+    //const track = this.track();
     this.sleepDeadline = resolveSleepTimer(id, Date.now());
     if (!this.sleepDeadline) {
       this.els.sleepStatus.textContent = "";
       return;
     }
-    if (track) telemetry.capture("sleep_timer_set", { track_id: track.id, option: id });
+    // if (track) telemetry.capture("sleep_timer_set", { track_id: track.id, option: id });
 
     if (this.sleepDeadline.kind === "timed" && this.sleepDeadline.endsAt !== null) {
       const endsAt = this.sleepDeadline.endsAt;
@@ -637,10 +628,10 @@ export class AudioPlayer {
   }
 
   private fireSleepTimer(): void {
-    const id = this.sleepId;
+    //const id = this.sleepId;
     this.activeAudio().pause();
-    const track = this.track();
-    if (track) telemetry.capture("sleep_timer_fired", { track_id: track.id, option: id });
+    //const track = this.track();
+    // if (track) telemetry.capture("sleep_timer_fired", { track_id: track.id, option: id });
     this.setSleepTimer("off");
     this.setStatusKey("player.sleepEnded");
   }
@@ -657,44 +648,44 @@ export class AudioPlayer {
 
   private onPlay(el: HTMLAudioElement): void {
     if (el !== this.activeAudio()) return;
-    const track = this.track();
+    //const track = this.track();
     this.els.playIcon.innerHTML = `<path d="${ICONS.pause}"/>`;
     this.els.playBtn.setAttribute("aria-label", t("player.pause"));
     setPlaybackState("playing");
-    if (track) {
-      telemetry.capture("playback_start", {
-        track_id: track.id,
-        mode: this.mode,
-        position_sec: Math.round(this.activeAudio().currentTime),
-        speed: this.speed,
-      });
-    }
+    // if (track) {
+    //   telemetry.capture("playback_start", {
+    //     track_id: track.id,
+    //     mode: this.mode,
+    //     position_sec: Math.round(this.activeAudio().currentTime),
+    //     speed: this.speed,
+    //  });
+    //}
     this.syncQueueIcons();
   }
 
   private onPause(el: HTMLAudioElement): void {
     if (el !== this.activeAudio()) return;
-    const track = this.track();
-    const active = this.activeAudio();
+    //const track = this.track();
+    //const active = this.activeAudio();
     this.els.playIcon.innerHTML = `<path d="${ICONS.play}"/>`;
     this.els.playBtn.setAttribute("aria-label", t("player.play"));
     setPlaybackState("paused");
-    if (track && !active.ended && !isComplete(active.currentTime, this.duration())) {
-      this.reportDrop(track, "pause");
-    }
+    // if (track && !active.ended && !isComplete(active.currentTime, this.duration())) {
+    //   this.reportDrop(track, "pause");
+    // }
     this.syncQueueIcons();
   }
 
   private onEnded(el: HTMLAudioElement): void {
-    const track = this.track();
-    if (track) {
-      telemetry.capture("playback_complete", {
-        track_id: track.id,
-        mode: this.mode,
-        duration_sec: Math.round(this.duration()),
-        speed: this.speed,
-      });
-    }
+    //const track = this.track();
+    // if (track) {
+    //   telemetry.capture("playback_complete", {
+    //     track_id: track.id,
+    //     mode: this.mode,
+    //     duration_sec: Math.round(this.duration()),
+    //     speed: this.speed,
+    // });
+    //}
     if (this.sleepDeadline?.kind === "eot") {
       this.fireSleepTimer();
       return;
@@ -739,31 +730,34 @@ export class AudioPlayer {
       return;
     }
     if (el === this.audio) {
+      //const track = this.track();
+      // if (track) {
+      //   telemetry.capture("playback_error", {
+      //     track_id: track.id,
+      //     mode: this.mode,
+      //     position_sec: Math.round(this.activeAudio().currentTime),
+      //     speed: this.speed,
+      //   });
+      // }
       this.setStatusKey("player.loadError");
       setPlaybackState("none");
     }
   }
 
-  private onPageHide = (): void => {
-    const track = this.track();
-    const active = this.activeAudio();
-    if (track && !active.paused && !isComplete(active.currentTime, this.duration())) {
-      this.reportDrop(track, "page_hide");
-    }
-  };
+  private onPageHide = (): void => {};
 
   // ----------------------------------------------------------------- helpers
 
-  private reportDrop(track: Track, reason: DropReason): void {
-    const active = this.activeAudio();
-    telemetry.capture("playback_drop", {
-      track_id: track.id,
-      mode: this.mode,
-      position_sec: Math.round(active.currentTime),
-      progress_pct: progressPct(active.currentTime, this.duration()),
-      reason,
-    });
-  }
+  //private reportDrop(track: Track, reason: DropReason): void {
+  //const active = this.activeAudio();
+  //telemetry.capture("playback_drop", {
+  //  track_id: track.id,
+  //  mode: this.mode,
+  //  position_sec: Math.round(active.currentTime),
+  //  progress_pct: progressPct(active.currentTime, this.duration()),
+  //  reason,
+  //});
+  //}
 
   private syncQueueIcons(): void {
     const paused = this.activeAudio().paused;

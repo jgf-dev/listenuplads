@@ -41,4 +41,11 @@ __pycache__/
 pipeline/artifacts/
 *.wav
 *.mp3
+.zed
 
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.vitest/
+.cloudflare
