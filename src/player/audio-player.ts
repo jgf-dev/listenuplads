@@ -24,7 +24,6 @@ import {
 import {
   clampTime,
   formatTime,
-  isComplete,
   nextIndex,
   prevIndex,
   //progressPct,
@@ -745,10 +744,7 @@ export class AudioPlayer {
     }
   }
 
-  private onPageHide = (): void => {
-    const track = this.track();
-    const active = this.activeAudio();
-  };
+  private onPageHide = (): void => {};
 
   // ----------------------------------------------------------------- helpers
 
