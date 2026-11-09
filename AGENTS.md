@@ -38,3 +38,5 @@ release. Add a tool name to select part of the graph. For example, run
   `sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile` (root, free).
 
 <!--VITE PLUS END-->
+
+Deployment: cf deplpoy
