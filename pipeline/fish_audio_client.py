@@ -69,11 +69,17 @@ class FishAudioClient:
         Returns:
             Raw audio bytes.
         """
+        try:
+            from .local_neural_tts import extract_clean_spoken_text
+        except (ImportError, ValueError):
+            from local_neural_tts import extract_clean_spoken_text
+
+        clean_text = extract_clean_spoken_text(text) or text
         chosen_model = model or self.default_model
         endpoint = f"{self.base_url}/tts"
 
         payload: Dict[str, Any] = {
-            "text": text,
+            "text": clean_text,
             "format": audio_format,
             "sample_rate": sample_rate,
             "latency": latency,

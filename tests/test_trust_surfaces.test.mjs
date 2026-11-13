@@ -145,3 +145,16 @@ test("GeoblockNotice formats country code and provides regulatory copy", () => {
   assert.match(el.innerHTML, /Regulatory Restriction \(GB\)/);
   assert.match(el.innerHTML, /JGF MEDIA Compliance/);
 });
+
+test("Every catalog story cover SVG exists in public/covers/", async () => {
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  const { fileURLToPath } = await import("node:url");
+  const { CATALOG } = await import("../src/catalog.ts");
+
+  const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+  for (const track of CATALOG) {
+    const coverPath = path.join(repoRoot, "public", track.cover);
+    assert.equal(fs.existsSync(coverPath), true, `Missing cover SVG: ${track.cover}`);
+  }
+});

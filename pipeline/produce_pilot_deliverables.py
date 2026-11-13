@@ -30,6 +30,7 @@ from typing import Dict, Any, List
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from gemini_tts_client import GeminiTTSClient
+from local_neural_tts import synthesize_speech_local
 from mastering import (
     generate_synthetic_ambience,
     generate_synthetic_sfx,
@@ -65,7 +66,8 @@ def render_or_synthesize_part(
     output_path: str,
     simulated_duration: float = 8.0,
 ) -> str:
-    """Renders speech using Gemini TTS client if initialized, or high-fidelity simulation."""
+    """Renders speech using Gemini TTS client if initialized, or local neural multi-speaker TTS."""
+    del simulated_duration
     if os.path.exists(output_path) and os.path.getsize(output_path) > 1000:
         logger.info("Part already exists: %s", output_path)
         return output_path
@@ -86,21 +88,9 @@ def render_or_synthesize_part(
             )
             return output_path
         except Exception as e:
-            logger.warning("Gemini TTS synthesis call encountered error: %s. Using local synthesis engine.", e)
+            logger.warning("Gemini TTS synthesis call encountered error: %s. Using local neural TTS engine.", e)
 
-    # Local acoustic synthesis fallback for testing/offline environments
-    cmd = [
-        "ffmpeg",
-        "-y",
-        "-f", "lavfi",
-        "-i", f"sine=frequency=185:duration={simulated_duration}",
-        "-af", "volume=-18dB,tremolo=f=1.2:d=0.25,highpass=f=80",
-        "-ar", "24000",
-        "-ac", "1",
-        output_path,
-    ]
-    subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    return output_path
+    return synthesize_speech_local(prompt, output_path)
 
 
 def produce_vacation_scene1_bedroom(tts_client: GeminiTTSClient, harness: AudioQCHarness) -> Dict[str, Any]:
@@ -140,7 +130,7 @@ Narrator: He buried it and stayed. I felt him pulse. I came on the sheet, hole c
     generate_synthetic_ambience(ambience_wav, duration_sec=45.0, ambience_type="room_tone")
 
     foley_creak = str(scene_dir / "bed_creak.wav")
-    generate_synthetic_sfx(foley_creak, sfx_type="thud")
+    generate_synthetic_sfx(foley_creak, sfx_type="creak")
 
     master_wav = str(OUTPUT_DIR / "story1_vacation_scene1_bedroom_master.wav")
     mix_soundtrack_and_sfx(
@@ -400,7 +390,7 @@ Narrator: The officer stayed after his shift. He shut the break room door.
     generate_synthetic_ambience(ambience_wav, duration_sec=30.0, ambience_type="room_tone")
 
     foley_click = str(scene_dir / "door_click.wav")
-    generate_synthetic_sfx(foley_click, sfx_type="thud")
+    generate_synthetic_sfx(foley_click, sfx_type="door")
 
     master_wav = str(OUTPUT_DIR / "story5_late_night_shift_master.wav")
     mix_soundtrack_and_sfx(
