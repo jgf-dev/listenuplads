@@ -15,4 +15,5 @@ export default defineConfig({
     // tests/ is a node --test runner (plain .mjs) — keep vitest scoped to src.
     include: ["src/**/*.test.ts"],
   },
+   plugins:[]
 });

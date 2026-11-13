@@ -99,14 +99,21 @@ def stitch_parts(
         return
 
     # Build concat filter with slight gap/silence between parts
-    filter_complex = []
     inputs = []
+    padded_tags = []
+    pad_filters = []
+    gap_ms = max(0, int(gap_duration_sec * 1000))
     for i, p in enumerate(part_wavs):
         inputs.extend(["-i", p])
+        if i < len(part_wavs) - 1 and gap_ms > 0:
+            pad_filters.append(f"[{i}:a]apad=pad_dur={gap_ms}ms[p{i}]")
+            padded_tags.append(f"[p{i}]")
+        else:
+            padded_tags.append(f"[{i}:a]")
 
-    # Interleave with small pad or concat directly
-    concat_str = "".join([f"[{i}:a]" for i in range(len(part_wavs))])
-    filter_complex = f"{concat_str}concat=n={len(part_wavs)}:v=0:a=1[outa]"
+    concat_str = "".join(padded_tags)
+    concat_stage = f"{concat_str}concat=n={len(part_wavs)}:v=0:a=1[outa]"
+    filter_complex = ";".join(pad_filters + [concat_stage]) if pad_filters else concat_stage
 
     tmp_concat = output_wav + ".tmp_concat.wav"
     cmd = ["ffmpeg", "-y"] + inputs + ["-filter_complex", filter_complex, "-map", "[outa]", tmp_concat]
@@ -119,24 +126,29 @@ def stitch_parts(
 
 
 def generate_synthetic_ambience(output_wav: str, duration_sec: float = 30.0, ambience_type: str = "room") -> str:
-    """Generates procedural background ambient bed if no uploaded file is provided."""
+    """Generates subtle, non-hissy acoustic room tone or outdoor wind bed (zero pure sine tones)."""
     out_dir = os.path.dirname(output_wav)
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
-    if ambience_type == "outdoor":
-        # Brown noise with slow modulation to simulate outdoor breeze
+    fade_out_st = max(0.0, duration_sec - 1.5)
+    if ambience_type in ("outdoor", "outdoor_breeze", "wind"):
+        # Filtered brownian air motion with gentle low-pass rolloff (no white/pink hiss)
         cmd = [
             "ffmpeg", "-y", "-f", "lavfi",
-            "-i", f"anoisesrc=d={duration_sec}:c=brown:r=24000:a=0.04",
-            "-af", "tremolo=f=0.4:d=0.5,lowpass=f=1800,volume=-26dB",
+            "-i", f"anoisesrc=d={duration_sec}:c=brown:r=24000:a=0.025",
+            "-af",
+            f"highpass=f=65,lowpass=f=480,tremolo=f=0.22:d=0.35,"
+            f"afade=t=in:st=0:d=1.2,afade=t=out:st={fade_out_st}:d=1.5,volume=-26dB",
             "-ar", "24000", "-ac", "1", output_wav,
         ]
     else:
-        # Subtle pink noise with acoustic room filtering for interior scenes
+        # Warm interior room tone: deep brownian air floor (60-320 Hz), free of high-frequency hiss
         cmd = [
             "ffmpeg", "-y", "-f", "lavfi",
-            "-i", f"anoisesrc=d={duration_sec}:c=pink:r=24000:a=0.03",
-            "-af", "highpass=f=120,lowpass=f=4000,volume=-24dB",
+            "-i", f"anoisesrc=d={duration_sec}:c=brown:r=24000:a=0.018",
+            "-af",
+            f"highpass=f=55,lowpass=f=320,"
+            f"afade=t=in:st=0:d=1.0,afade=t=out:st={fade_out_st}:d=1.5,volume=-28dB",
             "-ar", "24000", "-ac", "1", output_wav,
         ]
     run_cmd(cmd)
@@ -144,31 +156,45 @@ def generate_synthetic_ambience(output_wav: str, duration_sec: float = 30.0, amb
 
 
 def generate_synthetic_sfx(output_wav: str, sfx_type: str = "thud") -> str:
-    """Generates procedural spot sound effect (e.g. body thud, cloth rustle) for foley testing."""
+    """Generates realistic transient foley sound effects using shaped acoustic noise impulses (never sine beeps)."""
     out_dir = os.path.dirname(output_wav)
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
     if sfx_type == "thud":
-        # Low frequency resonant thud (wrestling mat / physical contact)
+        # Muffled physical impact / body weight thud: short low-passed brown-noise transient burst
         cmd = [
             "ffmpeg", "-y", "-f", "lavfi",
-            "-i", "sine=frequency=75:duration=0.4",
-            "-af", "volume=-12dB,afade=t=out:st=0.08:d=0.32",
+            "-i", "anoisesrc=d=0.32:c=brown:r=24000:a=0.35",
+            "-af",
+            "highpass=f=35,lowpass=f=145,afade=t=in:st=0:d=0.012,afade=t=out:st=0.04:d=0.26,volume=-6dB",
             "-ar", "24000", "-ac", "1", output_wav,
         ]
-    elif sfx_type == "rustle":
-        # High-pass pink noise burst (cloth / movement rustle)
+    elif sfx_type == "creak":
+        # Wood / mattress creak: dual short band-filtered friction impulses
         cmd = [
             "ffmpeg", "-y", "-f", "lavfi",
-            "-i", "anoisesrc=d=0.35:c=pink:r=24000:a=0.08",
-            "-af", "bandpass=f=2200:w=1000,volume=-16dB,afade=t=out:st=0.08:d=0.27",
+            "-i", "anoisesrc=d=0.45:c=brown:r=24000:a=0.28",
+            "-af",
+            "bandpass=f=240:w=90,tremolo=f=14:d=0.65,lowpass=f=420,"
+            "afade=t=in:st=0:d=0.03,afade=t=out:st=0.12:d=0.30,volume=-9dB",
+            "-ar", "24000", "-ac", "1", output_wav,
+        ]
+    elif sfx_type in ("door", "click"):
+        # Heavy latch click + muffled door closure transient
+        cmd = [
+            "ffmpeg", "-y", "-f", "lavfi",
+            "-i", "anoisesrc=d=0.28:c=brown:r=24000:a=0.40",
+            "-af",
+            "highpass=f=50,lowpass=f=260,afade=t=in:st=0:d=0.005,afade=t=out:st=0.025:d=0.22,volume=-7dB",
             "-ar", "24000", "-ac", "1", output_wav,
         ]
     else:
+        # Soft fabric / movement rustle: warm mid-low filtered brush transient
         cmd = [
             "ffmpeg", "-y", "-f", "lavfi",
-            "-i", "sine=frequency=440:duration=0.2",
-            "-af", "volume=-18dB,afade=t=out:st=0.05:d=0.15",
+            "-i", "anoisesrc=d=0.38:c=brown:r=24000:a=0.22",
+            "-af",
+            "bandpass=f=480:w=260,afade=t=in:st=0:d=0.04,afade=t=out:st=0.10:d=0.26,volume=-11dB",
             "-ar", "24000", "-ac", "1", output_wav,
         ]
     run_cmd(cmd)

@@ -271,6 +271,41 @@ Partner: [whispers] Right here.
         self.assertEqual(speech_config[1]["speaker"], "DummySecondary")
         self.assertEqual(speech_config[1]["voice"], "Puck")
 
+    def test_local_neural_tts_strips_director_notes_and_headers(self):
+        from local_neural_tts import extract_clean_spoken_text, parse_dialogue_turns
+
+        prompt = """# SYSTEM PREAMBLE: Synthesize speech ONLY for the transcripts under the #### TRANSCRIPT headers. Do NOT read aloud the section titles, scene descriptions, actor names, or director notes.
+# AUDIO PROFILE: Levi & Ewan
+## "The Bedroom Hold"
+### THE SCENE: Dim cabin bedroom at morning.
+### DIRECTOR'S NOTES
+Style:
+- Ewan (Voice: Algenib): Heavy physical mass, deep low pitch floor, chest resonance.
+- Levi (Voice: Puck): Equal adult male pinned beneath Ewan.
+Pace: Deliberate, rhythmic, physical pacing.
+Accent: Standard American
+#### TRANSCRIPT
+Narrator: He was in me to the root, and I took it.
+Ewan: [low, voiced] "Don't fucking move, Levi. I'm close."
+"""
+        speakers, turns = parse_dialogue_turns(prompt)
+        self.assertEqual(set(speakers.keys()), {"Narrator", "Ewan"})
+        self.assertEqual(len(turns), 2)
+        spoken = extract_clean_spoken_text(prompt)
+        for forbidden in (
+            "SYSTEM PREAMBLE",
+            "DIRECTOR'S NOTES",
+            "Style",
+            "Pace",
+            "Accent",
+            "Standard American",
+            "Algenib",
+            "Heavy physical mass",
+            "low, voiced",
+            "headers",
+        ):
+            self.assertNotIn(forbidden, spoken)
+
 
 if __name__ == "__main__":
     unittest.main()
