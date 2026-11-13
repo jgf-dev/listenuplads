@@ -117,7 +117,17 @@ class AudioPipelineOrchestrator:
         self, transcript: str, max_speakers: int = 2, max_chars: int = 1800
     ) -> List[str]:
         """Splits transcript into chunks adhering to the max 2-voice limit and character threshold."""
-        lines = [line.strip() for line in transcript.strip().split("\n") if line.strip()]
+        try:
+            from .local_neural_tts import FORBIDDEN_METADATA_SPEAKERS, isolate_transcript_section
+        except (ImportError, ValueError):
+            from local_neural_tts import FORBIDDEN_METADATA_SPEAKERS, isolate_transcript_section
+
+        body = isolate_transcript_section(transcript)
+        lines = [
+            line.strip()
+            for line in body.split("\n")
+            if line.strip() and not line.strip().startswith("#")
+        ]
         chunks: List[List[str]] = []
         current_chunk: List[str] = []
         current_speakers: set = set()
@@ -127,7 +137,10 @@ class AudioPipelineOrchestrator:
             # Detect speaker prefix
             speaker = None
             if ":" in line:
-                speaker = line.split(":", 1)[0].strip()
+                cand = line.split(":", 1)[0].strip()
+                if cand.lower() in FORBIDDEN_METADATA_SPEAKERS:
+                    continue
+                speaker = cand
             elif line.startswith("[") and "]" in line:
                 speaker = line[1:line.index("]")].strip()
 
@@ -209,25 +222,22 @@ class AudioPipelineOrchestrator:
             )
             return part_wav, None
 
-        logger.info("Simulating / Local generation for chunk %d (provider: %s)...", part_idx, provider)
-        duration_sec = max(3.0, len(chunk_transcript.split()) * 0.45)
-        cmd = [
-            "ffmpeg",
-            "-y",
-            "-f",
-            "lavfi",
-            "-i",
-            f"sine=frequency=220:duration={duration_sec}",
-            "-af",
-            "volume=-20dB,highpass=f=80",
-            "-ar",
-            "24000",
-            "-ac",
-            "1",
-            part_wav,
+        logger.info("Local neural TTS generation for chunk %d (provider: %s)...", part_idx, provider)
+        try:
+            from .local_neural_tts import synthesize_speech_local
+        except (ImportError, ValueError):
+            from local_neural_tts import synthesize_speech_local
+
+        char_lines = [
+            f"- {name} (Voice: {info.get('voice', 'Algenib')}): {info.get('profile', 'Grounded')}"
+            for name, info in scene.characters.items()
         ]
-        import subprocess
-        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        prompt_for_local = (
+            f"# AUDIO PROFILE: {scene.title}\n"
+            f"### DIRECTOR'S NOTES\nStyle:\n{chr(10).join(char_lines)}\n"
+            f"#### TRANSCRIPT\n{chunk_transcript}\n"
+        )
+        synthesize_speech_local(prompt_for_local, part_wav, prefer_fast=True)
         return part_wav, None
 
     def process_scene(self, scene: SceneSpec) -> ProductionResult:
