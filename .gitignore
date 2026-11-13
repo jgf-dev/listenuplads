@@ -42,3 +42,8 @@ pipeline/artifacts/
 *.wav
 *.mp3
 
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
