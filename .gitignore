@@ -50,3 +50,4 @@ pipeline/artifacts/
 cloudflare/state
 .cloudflare/state
 v3
+.cloudflare/types
