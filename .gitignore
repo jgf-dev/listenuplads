@@ -47,3 +47,6 @@ pipeline/artifacts/
 .wrangler
 .dev.vars*
 !.dev.vars.example
+cloudflare/state
+.cloudflare/state
+v3
