@@ -12,7 +12,15 @@
     "whisper_guideline": "Strictly use low, close-proximity VOICED phonation with vocal body and chest resonance. Continuous unvoiced white-noise whispering is banned as it collapses phonation and causes inter-scene timbre drift.",
     "state_isolation": "Reset stateful session parameters between scenes to prevent intimate bedroom delivery styles from carrying over into daytime/outdoor scenes.",
     "timbre_matching": "Maintain consistent adult male vocal identity across scene transitions; adjust projection level while keeping fundamental frequency (< 200 Hz) and chest resonance matched.",
-    "banned_tropes": ["velvety", "silken", "claimed", "delicate", "adoration-as-the-event", "shivering-as-the-event", "'I've got you' as the climax"]
+    "banned_tropes": [
+      "velvety",
+      "silken",
+      "claimed",
+      "delicate",
+      "adoration-as-the-event",
+      "shivering-as-the-event",
+      "'I've got you' as the climax"
+    ]
   },
   "archetypes": [
     {
@@ -42,7 +50,15 @@
         "chatterbox": ["male_grounded_compact_tenor"],
         "orpheus_3b": ["male_strained_resonant"]
       },
-      "recommended_tags": ["[low, voiced]", "[tight]", "[breath catch]", "[gasp]", "[pant]", "[groan]", "[short pause]"],
+      "recommended_tags": [
+        "[low, voiced]",
+        "[tight]",
+        "[breath catch]",
+        "[gasp]",
+        "[pant]",
+        "[groan]",
+        "[short pause]"
+      ],
       "forbidden_intimate_tags": ["[whispers]", "[adoration]", "[shivering]", "[shouting]"]
     },
     {

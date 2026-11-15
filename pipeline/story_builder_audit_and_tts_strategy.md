@@ -3,15 +3,16 @@
 **Author:** Audio-Visual Engineer, Project A  
 **Recipient:** Chief of Staff  
 **Date:** October 2026  
-**Status:** Verification Complete & Ready for Review  
+**Status:** Verification Complete & Ready for Review
 
 ---
 
 ## 1. Executive Summary
 
-This deliverable establishes the technical and operational foundation for Project A's audio production pipeline, transforming gay male erotic stories into broadcast-grade audio narratives. 
+This deliverable establishes the technical and operational foundation for Project A's audio production pipeline, transforming gay male erotic stories into broadcast-grade audio narratives.
 
 Key milestones accomplished in this heartbeat:
+
 1. **Audited `jgf-dev/story-buillder`**: Identified reusable script segmentation patterns and isolated critical architectural bottlenecks (hardcoded Vertex AI projects, session dropping, unmastered loudness swings of up to 6.4 dB).
 2. **Evaluated TTS Provider Strategy & Integration Architecture**:
    - **OpenRouter API Gateway**: Integrated for flexible LLM orchestration (story analysis, scene breakdown, emotional cue tagging, and director prompt crafting) across Gemini, Claude, and open models without cloud provider lock-in.
@@ -29,6 +30,7 @@ Key milestones accomplished in this heartbeat:
 ## 2. In-Depth Story-Builder Audit (`jgf-dev/story-buillder`)
 
 ### What is Reusable
+
 1. **Script Segmentation & Character Profiling**:
    - The two-step analysis in `story_analyzer` (breaking narrative into scenes, determining emotional arc, setting intimacy levels from `none` to `high`, and extracting speaking characters) is sound and directly translatable.
 2. **The Canonical Prompt Schema**:
@@ -46,6 +48,7 @@ Key milestones accomplished in this heartbeat:
    - Automatically chunks transcripts when encountering a 3rd speaker or exceeding 1800 characters to adhere to the Gemini TTS 2-voice limit.
 
 ### What is Broken & Brittle
+
 1. **Hardcoded Vertex AI Infrastructure**:
    - In `src/storybuilder/agents/tts_prompt_crafter/agent.py`, the agent hardcodes:
      - Project ID: `storage-499607`
@@ -57,7 +60,7 @@ Key milestones accomplished in this heartbeat:
 3. **Outdated Model Baseline**:
    - `client.py` is hardcoded to `gemini-3.1-flash-tts-preview` (line 249) instead of the newly available `gemini-3.8-flash` and `gemini-3.8-flash-lite`.
 4. **Single-Speaker Hack**:
-   - In `client.py` (lines 100-102), single-speaker prompts are padded with ``{"speaker": "Dummy", "voice": "Puck"}`` to avoid API 400 validation errors.
+   - In `client.py` (lines 100-102), single-speaker prompts are padded with `{"speaker": "Dummy", "voice": "Puck"}` to avoid API 400 validation errors.
 5. **Zero Audio Post-Processing or Mastering**:
    - Output files are left as isolated `.wav` chunks.
    - **Severe Loudness Swings**: In our empirical tests of existing `story-builder` renders, `03-part.wav` rendered at **-26.8 LUFS** while `04-part.wav` rendered at **-20.4 LUFS** (a **6.4 dB volume leap** across consecutive scenes!). In `the_secret_vacation`, scenes swung between -18.5 and -24.2 LUFS.
@@ -66,6 +69,7 @@ Key milestones accomplished in this heartbeat:
    - **No Ambience Layering**: Pure dry voice with no acoustic bed or Foley integration.
 
 ### What to Rebuild in `listenuplads`
+
 1. Rebuild orchestration into an autonomous CLI/workflow decoupled from hardcoded Vertex AI IDs.
 2. Replace isolated chunk output with an automated end-to-end assembly pipeline:
    `Story Text -> Segmentation -> Script Annotation -> Splitter -> TTS Backend -> Audio Stitching -> Dual-Pass EBU R128 Mastering -> Ducked Ambience Layering -> Automated QC`.
@@ -75,20 +79,23 @@ Key milestones accomplished in this heartbeat:
 
 ## 3. TTS Provider Bake-Off & Integration Architecture
 
-| Provider / Model | Routing / Commercial Terms | Adult Content Policy / Role | Multi-Speaker / Voices | Audio Quality & Realism | Estimated Cost / Finished Hour | Recommendation / Role |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **OpenRouter Gateway** | Multi-model routing (Gemini, Claude, Llama) | Flexible text routing for scene analysis, cue tagging, and script formatting | N/A (Text / LLM Orchestration) | High flexibility, prevents cloud lock-in | Input/output token based (< $0.05 / story) | **PRIMARY ORCHESTRATION GATEWAY.** Generates structured prompts for all TTS engines. |
-| **Fish Audio (`s2.1-pro` / `s2.1-pro-free`)** | REST API (`/v1/tts`), free window to Nov 30 | Included for non-explicit passages, dialogue, and atmospheric narration. Terms restriction unenforced per user guidance. | Instant voice cloning with reference audio clips + extensive community voice library | High natural voice cloning & prosody control | Free until Nov 30 (via `s2.1-pro-free`), then $0.015/min | **INCLUDED FOR NON-EXPLICIT PASSAGES & BATCH CLONING.** |
-| **Google Gemini TTS (3.1 Preview Baseline vs 3.8 Flash / Flash-Lite)** | Google Terms; Commercial via Google Cloud / AI Studio | Permitted with `safety_settings` set to `BLOCK_NONE` (`HARM_CATEGORY_SEXUALLY_EXPLICIT`). Core harm filters remain active. | Max 2 voices per turn; extensive celestial voice catalog (Enceladus, Algenib, etc.) | Exceptional intimate realism via Director's Chair prompting and glottal flow directives | ~$0.90 – $1.80 per finished audio hour (batch API calls) | **PRIMARY HOSTED ENGINE FOR INTIMATE / EROTIC DIALOGUE.** Must be backed up by automated mastering. |
-| **Chatterbox-Turbo / Nano (Resemble AI)** | **MIT License** (Fully permissive, commercial use allowed) | **100% UNRESTRICTED** (Self-hosted on rented GPUs or local). Zero moderation or ban risk. | Zero-shot voice cloning with reference audio clips; native paralinguistic tags (`[laugh]`, `[cough]`, `[sigh]`) | State-of-the-art conversational delivery, 350M/110M params; Nano runs 3x realtime on CPU | **$0.02 – $0.05 per finished hour** on rented RTX 4090 ($0.34/hr) | **TOP RECOMMENDATION FOR SELF-HOSTED BATCH PRODUCTION.** 100% immune to account bans; lowest cost; locked character consistency. |
-| **Orpheus 3B (Canopy Labs)** | **Apache 2.0** (Open commercial license) | **100% UNRESTRICTED** (Self-hosted). Zero ban risk. | Llama-3.2-3B backbone; inline emotion tags; prompt-conditioned | Deep expressive emotional range, nuanced pacing | **$0.08 – $0.15 per finished hour** on rented RTX 4090 | **RECOMMENDED FOR EMOTIONAL CLIMAX SCENES & A/B EVAL.** |
+| Provider / Model                                                       | Routing / Commercial Terms                                 | Adult Content Policy / Role                                                                                                | Multi-Speaker / Voices                                                                                          | Audio Quality & Realism                                                                  | Estimated Cost / Finished Hour                                    | Recommendation / Role                                                                                                            |
+| :--------------------------------------------------------------------- | :--------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------- |
+| **OpenRouter Gateway**                                                 | Multi-model routing (Gemini, Claude, Llama)                | Flexible text routing for scene analysis, cue tagging, and script formatting                                               | N/A (Text / LLM Orchestration)                                                                                  | High flexibility, prevents cloud lock-in                                                 | Input/output token based (< $0.05 / story)                        | **PRIMARY ORCHESTRATION GATEWAY.** Generates structured prompts for all TTS engines.                                             |
+| **Fish Audio (`s2.1-pro` / `s2.1-pro-free`)**                          | REST API (`/v1/tts`), free window to Nov 30                | Included for non-explicit passages, dialogue, and atmospheric narration. Terms restriction unenforced per user guidance.   | Instant voice cloning with reference audio clips + extensive community voice library                            | High natural voice cloning & prosody control                                             | Free until Nov 30 (via `s2.1-pro-free`), then $0.015/min          | **INCLUDED FOR NON-EXPLICIT PASSAGES & BATCH CLONING.**                                                                          |
+| **Google Gemini TTS (3.1 Preview Baseline vs 3.8 Flash / Flash-Lite)** | Google Terms; Commercial via Google Cloud / AI Studio      | Permitted with `safety_settings` set to `BLOCK_NONE` (`HARM_CATEGORY_SEXUALLY_EXPLICIT`). Core harm filters remain active. | Max 2 voices per turn; extensive celestial voice catalog (Enceladus, Algenib, etc.)                             | Exceptional intimate realism via Director's Chair prompting and glottal flow directives  | ~$0.90 – $1.80 per finished audio hour (batch API calls)          | **PRIMARY HOSTED ENGINE FOR INTIMATE / EROTIC DIALOGUE.** Must be backed up by automated mastering.                              |
+| **Chatterbox-Turbo / Nano (Resemble AI)**                              | **MIT License** (Fully permissive, commercial use allowed) | **100% UNRESTRICTED** (Self-hosted on rented GPUs or local). Zero moderation or ban risk.                                  | Zero-shot voice cloning with reference audio clips; native paralinguistic tags (`[laugh]`, `[cough]`, `[sigh]`) | State-of-the-art conversational delivery, 350M/110M params; Nano runs 3x realtime on CPU | **$0.02 – $0.05 per finished hour** on rented RTX 4090 ($0.34/hr) | **TOP RECOMMENDATION FOR SELF-HOSTED BATCH PRODUCTION.** 100% immune to account bans; lowest cost; locked character consistency. |
+| **Orpheus 3B (Canopy Labs)**                                           | **Apache 2.0** (Open commercial license)                   | **100% UNRESTRICTED** (Self-hosted). Zero ban risk.                                                                        | Llama-3.2-3B backbone; inline emotion tags; prompt-conditioned                                                  | Deep expressive emotional range, nuanced pacing                                          | **$0.08 – $0.15 per finished hour** on rented RTX 4090            | **RECOMMENDED FOR EMOTIONAL CLIMAX SCENES & A/B EVAL.**                                                                          |
 
 ### Provider Policy Guidance: Fish Audio & Hybrid Routing
+
 While Section "User Submissions" of Fish Audio's Terms of Use mentions restrictions on sexually explicit material, in practice this restriction is not actively enforced on standard audio synthesis. Following directive guidance:
+
 1. **Fish Audio** is included in the production stack for non-explicit passages, atmospheric narration, character dialogue, and voice cloning. The free API window (`s2.1-pro-free`) provides zero-cost synthesis until November 30.
 2. **Gemini TTS (`BLOCK_NONE`)** and **Self-Hosted Chatterbox / Orpheus** serve as the dedicated engines for explicit intimate scenes, ensuring absolute safety from account termination.
 
 ### Empirical Findings: Gemini 3.8 Flash vs Gemini 3.1 Flash TTS Preview
+
 1. **Gemini 3.8 Flash**: Tested with `response_modalities=["audio"]`. While the API accepts the parameter, the model responds with textual thought steps and conversational text rather than returning audio binary streams in the Interactions API.
 2. **Gemini 3.1 Flash TTS Preview (`gemini-3.1-flash-tts-preview`)**: Fully validated as Google's production multi-speaker audio synthesis model, outputting broadcast-grade 24kHz 16-bit mono PCM audio.
 3. **Multi-Turn Audio History Limitation**: Google GenAI's Interactions API rejects `previous_interaction_id` calls where prior turns contain audio data (`400: Audio input modality is not enabled for this model`). Each chunk/scene must carry self-contained Director's Notes and voice configs. This architectural finding explains and resolves the session drops observed in the legacy `story-builder`.
@@ -100,6 +107,7 @@ While Section "User Submissions" of Fish Audio's Terms of Use mentions restricti
 The QC Harness (`listenuplads/pipeline/qc_harness.py`) and Mastering Engine (`listenuplads/pipeline/mastering.py`) have been developed and empirically verified.
 
 ### Standards & Target Specifications
+
 - **Integrated Loudness**: Target `-16.0 ± 1.5 LUFS` (Podcast / Headphone mobile standard, EBU R128).
 - **True Peak**: `≤ -1.0 dBTP` (Prevents clipping after AAC/MP3 transcoding).
 - **Loudness Range (LRA)**: `≤ 12.0 LU` (Ensures whispers remain audible in cars/trains while preventing loud screams from hurting ears).
@@ -109,6 +117,7 @@ The QC Harness (`listenuplads/pipeline/qc_harness.py`) and Mastering Engine (`li
 ### Verification Test: Before vs. After Mastering
 
 #### 1. Baseline `story-builder` Renders (`the_secret_vacation_1_I`):
+
 - `01-scene1.wav`: -20.6 LUFS | True Peak: -1.7 dBTP | LRA: 18.4 LU | Max Silence: 2.83s ❌
 - `02-scene2.wav`: -24.2 LUFS | True Peak: -2.0 dBTP | LRA: 10.6 LU ❌
 - `03-scene3.wav`: -18.5 LUFS | True Peak: -1.1 dBTP | LRA: 10.6 LU ❌
@@ -116,11 +125,13 @@ The QC Harness (`listenuplads/pipeline/qc_harness.py`) and Mastering Engine (`li
 - **Issues Detected**: 5.7 dB loudness leap between Scene 2 & 3; 4.9 dB drop between Scene 3 & 4; excessive dynamic range (18.4 LU); 2.83s dead air gap.
 
 #### 2. Mastered & QC Verified Output (`listenuplads/pipeline/artifacts/mastered_demo`):
+
 - `02-scene2_mastered.wav`: **-16.4 LUFS** | **-1.1 dBTP** | **5.6 LU** ✅ **PASS**
 - `03-scene3_mastered.wav`: **-16.2 LUFS** | **-1.1 dBTP** | **7.0 LU** ✅ **PASS**
 - **Result**: Scene-to-scene loudness drift reduced from **5.7 dB down to 0.2 dB**!
 
 #### 3. Full Story Stitching & Ambience Layering (`i_came_during_tryouts`):
+
 - Raw parts had 6.4 dB volume jumps (-26.8 LUFS to -20.4 LUFS).
 - Stitched into 5.73-minute full chapter with dynamic sidechain-ducked background room bed:
   - `i_came_during_tryouts_layered_master.wav`:
@@ -135,6 +146,7 @@ The QC Harness (`listenuplads/pipeline/qc_harness.py`) and Mastering Engine (`li
 ## 5. SFX / Ambience Layering & Mixing Chain
 
 The background bed mixing chain is codified in `pipeline/mastering.py`:
+
 1. **Frequency Separation**:
    - Dialogue Track: High-pass filtered at 80Hz (eliminating mic thump/rumble).
    - Ambience Track: High-pass at 100Hz (eliminating low-end mud) and low-pass at 7.0kHz (preventing hiss from clashing with dialogue sibilance).
@@ -151,11 +163,11 @@ The background bed mixing chain is codified in `pipeline/mastering.py`:
 
 Assuming Project A generates 100 hours of finished audio per month:
 
-| Architecture | Setup / Infrastructure | Unit Cost / Finished Hour | Monthly Cost (100 finished hrs) | Account Ban Risk |
-| :--- | :--- | :--- | :--- | :--- |
-| **Hosted Gemini API (Direct Batch)** | Google Cloud API Key (pay-as-you-go) | $1.20 – $1.80 | $120 – $180 | Low/Medium (Subject to Google safety filter review) |
-| **Self-Hosted Chatterbox on RunPod (RTX 4090)** | Rented GPU instance ($0.34/hr, 12x realtime batch throughput) | **$0.03 – $0.05** | **$3.50 – $5.00** | **ZERO (100% immune)** |
-| **Self-Hosted Orpheus 3B on Vast.ai (RTX 4090)** | Rented GPU instance ($0.34/hr, 4x realtime batch throughput) | **$0.08 – $0.12** | **$8.00 – $12.00** | **ZERO (100% immune)** |
+| Architecture                                     | Setup / Infrastructure                                        | Unit Cost / Finished Hour | Monthly Cost (100 finished hrs) | Account Ban Risk                                    |
+| :----------------------------------------------- | :------------------------------------------------------------ | :------------------------ | :------------------------------ | :-------------------------------------------------- |
+| **Hosted Gemini API (Direct Batch)**             | Google Cloud API Key (pay-as-you-go)                          | $1.20 – $1.80             | $120 – $180                     | Low/Medium (Subject to Google safety filter review) |
+| **Self-Hosted Chatterbox on RunPod (RTX 4090)**  | Rented GPU instance ($0.34/hr, 12x realtime batch throughput) | **$0.03 – $0.05**         | **$3.50 – $5.00**               | **ZERO (100% immune)**                              |
+| **Self-Hosted Orpheus 3B on Vast.ai (RTX 4090)** | Rented GPU instance ($0.34/hr, 4x realtime batch throughput)  | **$0.08 – $0.12**         | **$8.00 – $12.00**              | **ZERO (100% immune)**                              |
 
 **Financial Takeaway:** Self-hosting Chatterbox or Orpheus on rented spot GPUs reduces production audio costs by **over 95%** while providing complete immunity from third-party account bans.
 
