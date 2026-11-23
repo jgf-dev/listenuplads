@@ -8,6 +8,7 @@ applications:
     hooks:
       build: |
         set -ex
+        npm install vite-plus
         npm ci --omit=dev
         npm run build
     web:
