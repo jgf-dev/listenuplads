@@ -1,0 +1,24 @@
+# Upsun configuration, generated using AI at: 2026-11-23T01:53:37.304Z
+# AI can make mistakes. Please modify this file to suit your needs.
+applications:
+  listenuplads:
+    type: nodejs:26
+    build:
+      flavor: none
+    hooks:
+      build: |
+        set -ex
+        npm ci --omit=dev
+        npm run build
+    web:
+      commands:
+        start: sleep infinity
+      locations:
+        /:
+          root: dist
+          index: [index.html]
+          scripts: false
+          expires: 24h
+          rules:
+            '\.(css|js|gif|jpe?g|png|svg|webp)$':
+              expires: 4w
