@@ -9,6 +9,7 @@ applications:
       build: |
         set -ex
         curl -fsSL https://vite.plus | bash
+        . "/app/.config/vite-plus/env"
         npm ci --omit=dev
         npm run build
     web:
