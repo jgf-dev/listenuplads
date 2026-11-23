@@ -8,7 +8,7 @@ applications:
     hooks:
       build: |
         set -ex
-        npm install vp
+        curl -fsSL https://vite.plus | bash
         npm ci --omit=dev
         npm run build
     web:
