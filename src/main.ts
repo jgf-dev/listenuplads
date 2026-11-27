@@ -45,6 +45,18 @@ app.innerHTML = `
     </div>
   </header>
   <main class="shell__main">
+    <section class="shell__hero" aria-labelledby="shell-hero-title">
+      <img
+        class="shell__hero-image"
+        src="/images/listen-up-lads-promo.jpg"
+        alt=""
+        fetchpriority="high"
+      />
+      <div class="shell__hero-copy">
+        <h1 id="shell-hero-title" class="shell__hero-title" data-shell="promo-title"></h1>
+        <p class="shell__hero-description" data-shell="promo-description"></p>
+      </div>
+    </section>
     <div id="discovery-root"></div>
     <div id="player-root"></div>
     <button type="button" class="shell__vip" data-shell="vip"></button>
@@ -77,6 +89,8 @@ function syncShellStrings(): void {
     if (el) el.textContent = value;
   };
   set("tagline", t("shell.tagline"));
+  set("promo-title", t("shell.promoTitle"));
+  set("promo-description", t("shell.promoDescription"));
   set("footer", t("shell.footer"));
   set("vip", t("shell.unlockVip"));
   set("lang-toggle", t("shell.langSwitchLabel"));

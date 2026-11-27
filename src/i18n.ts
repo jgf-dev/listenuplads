@@ -16,6 +16,8 @@ export const LOCALE_STORAGE_KEY = "listenuplads_locale_v1";
 const en = {
   shell: {
     tagline: "Erotic audio stories, mastered for headphones.",
+    promoTitle: "Stay for one more story.",
+    promoDescription: "Intimate audio fiction for after dark.",
     ageVerified: "18+ confirmed",
     agePending: "18+ gate pending",
     footer: "Adults only · 18+ · Cancel anytime",
@@ -170,6 +172,8 @@ export type Strings = Widen<typeof en>;
 const fr: Strings = {
   shell: {
     tagline: "Récits audio érotiques, masterisés pour le casque.",
+    promoTitle: "Encore une histoire.",
+    promoDescription: "Des fictions audio intimes pour la nuit.",
     ageVerified: "18+ confirmé",
     agePending: "Contrôle 18+ en attente",
     footer: "Réservé aux adultes · 18+ · Résiliable à tout moment",
