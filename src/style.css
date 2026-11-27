@@ -41,6 +41,8 @@ body {
   min-height: 100svh;
   background:
     radial-gradient(120% 60% at 50% -10%, rgba(216, 180, 254, 0.08), transparent 60%),
+    linear-gradient(rgba(13, 10, 16, 0.88), rgba(13, 10, 16, 0.88)),
+    url("/images/listen-up-lads-texture.jpg") center top / 520px 520px repeat,
     var(--token-bg-app);
 }
 
@@ -140,6 +142,67 @@ body {
   width: 100%;
   margin: 0 auto;
   padding-top: var(--token-space-4);
+}
+
+.shell__hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: 190px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  margin: 0 var(--token-space-5) var(--token-space-5);
+  border: 1px solid var(--token-border-subtle);
+  border-radius: var(--token-radius-lg);
+  background: var(--token-bg-elevated);
+}
+
+.shell__hero::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 7, 15, 0.94) 0%,
+    rgba(10, 7, 15, 0.66) 52%,
+    rgba(10, 7, 15, 0.06) 100%
+  );
+  content: "";
+}
+
+.shell__hero-image {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.shell__hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 75%;
+  padding: var(--token-space-5);
+}
+
+.shell__hero-title {
+  margin: 0 0 var(--token-space-2);
+  color: var(--token-text-primary);
+  font-family: var(--token-font-display);
+  font-size: clamp(24px, 7vw, 32px);
+  font-weight: 600;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.shell__hero-description {
+  margin: 0;
+  color: var(--token-text-secondary);
+  font-size: var(--token-text-sm);
+  line-height: var(--token-leading-body);
 }
 
 .shell__footer {
